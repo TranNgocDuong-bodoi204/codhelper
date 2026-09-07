@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test API</title>
+    <script src="script.js" defer ></script>
+    <script src="helper.js" defer ></script>
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            padding: 24px;
+            font-family: Arial, sans-serif;
+            color: #263238;
+            background: #f4f6f8;
+        }
+        main { max-width: 1000px; margin: 0 auto; }
+        h1 { margin: 0 0 24px; font-size: 24px; }
+        h2 { margin: 28px 0 12px; font-size: 19px; color: #37474f; }
+        h3 { margin: 20px 0 8px; font-size: 16px; color: #546e7a; }
+        .panel {
+            padding: 18px;
+            background: #fff;
+            border: 1px solid #d9e0e5;
+            border-radius: 6px;
+        }
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr) auto;
+            gap: 10px;
+            align-items: end;
+        }
+        label { display: grid; gap: 5px; font-size: 13px; color: #546e7a; }
+        input, select, button { width: 100%; padding: 9px 10px; font: inherit; }
+        input, select { border: 1px solid #b0bec5; border-radius: 4px; background: #fff; }
+        select optgroup { font-weight: 600; }
+        select optgroup.train-group { background: #e8f1fb; color: #24527a; }
+        select optgroup.t4-group { background: #edf5ed; color: #35613b; }
+        select optgroup.t5-group { background: #fff4e5; color: #76521f; }
+        button { border: 0; border-radius: 4px; color: #fff; background: #1976d2; cursor: pointer; }
+        button:hover { background: #1565c0; }
+        .table-wrap { overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; background: #fff; }
+        th, td { padding: 10px 12px; border: 1px solid #d9e0e5; text-align: left; }
+        th { background: #eceff1; font-weight: 600; }
+        td:not(:first-child), th:not(:first-child) { text-align: right; }
+        .speed-grid { display: grid; grid-template-columns: 1fr 1fr auto; gap: 10px; align-items: end; }
+        #resultSpeed { margin-top: 14px; line-height: 1.6; }
+        @media (max-width: 700px) {
+            body { padding: 14px; }
+            .form-grid, .speed-grid { grid-template-columns: 1fr 1fr; }
+            .form-grid button, .speed-grid button { grid-column: 1 / -1; }
+        }
+    </style>
+</head>
+<body>
+    <main>
+    <h1>Tính toán quân đội và sự kiện</h1>
+
+    <section class="panel">
+    <h2>Thiết lập chung</h2>
+    <label>Buff (%)
+        <input type="number" id="buff" placeholder="Buff %" />
+    </label>
+    </section>
+
+    <section class="panel">
+    <h2>Tính số lượng quân với speed đã biết</h2>
+    <div class="form-grid">
+        <label>Ngày
+            <input type="number" id="daysNumber" placeholder="Ngày" />
+        </label>
+        <label>Giờ
+            <input type="number" id="hoursNumber" placeholder="Giờ">
+        </label>
+        <label>Phút
+            <input type="number" id="minutesNumber" placeholder="Phút">
+        </label>
+        <button onclick="CalculateQuantityTroops()">Tính số lượng</button>
+    </div>
+
+    <h2>Train thẳng</h2>
+    <div class="table-wrap">
+    <table>
+        <tr>
+            <th>Loại lính</th>
+            <th>Số lượng</th>
+            <th>Điểm Lãnh chúa</th>
+            <th>Điểm Thiên đỉnh</th>
+        </tr>
+        <tr><td>T1</td><td id="t1Q"></td><td id="t1SglP">0</td><td id="t1GhP">0</td></tr>
+        <tr><td>T2</td><td id="t2Q"></td><td id="t2SglP">0</td><td id="t2GhP">0</td></tr>
+        <tr><td>T3</td><td id="t3Q"></td><td id="t3SglP">0</td><td id="t3GhP">0</td></tr>
+        <tr><td>T4</td><td id="t4Q"></td><td id="t4SglP">0</td><td id="t4GhP">0</td></tr>
+        <tr><td>T5</td><td id="t5Q"></td><td id="t5SglP">0</td><td id="t5GhP">0</td></tr>
+    </table>
+    </div>
+
+    <h2>Nâng cấp</h2>
+    <h3>Lên T4</h3>
+    <div class="table-wrap">
+    <table>
+        <tr>
+            <th>Nâng cấp</th>
+            <th>Số lượng</th>
+            <th>Điểm Lãnh chúa</th>
+            <th>Điểm Thiên đỉnh</th>
+        </tr>
+        <tr><td>T1 lên T4</td><td id="t1T4Q"></td><td id="t1T4SglP">0</td><td id="t1T4GhP">0</td></tr>
+        <tr><td>T2 lên T4</td><td id="t2T4Q"></td><td id="t2T4SglP">0</td><td id="t2T4GhP">0</td></tr>
+        <tr><td>T3 lên T4</td><td id="t3T4Q"></td><td id="t3T4SglP">0</td><td id="t3T4GhP">0</td></tr>
+    </table>
+    </div>
+
+    <h3>Lên T5</h3>
+    <div class="table-wrap">
+    <table>
+        <tr>
+            <th>Nâng cấp</th>
+            <th>Số lượng</th>
+            <th>Điểm Lãnh chúa</th>
+            <th>Điểm Thiên đỉnh</th>
+        </tr>
+        <tr><td>T1 lên T5</td><td id="t1T5Q"></td><td id="t1T5SglP">0</td><td id="t1T5GhP">0</td></tr>
+        <tr><td>T2 lên T5</td><td id="t2T5Q"></td><td id="t2T5SglP">0</td><td id="t2T5GhP">0</td></tr>
+        <tr><td>T3 lên T5</td><td id="t3T5Q"></td><td id="t3T5SglP">0</td><td id="t3T5GhP">0</td></tr>
+        <tr><td>T4 lên T5</td><td id="t4T5Q"></td><td id="t4T5SglP">0</td><td id="t4T5GhP">0</td></tr>
+    </table>
+    </div>
+    </section>
+    <section class="panel">
+        <span>rss calculate</span>
+
+        <input type="radio" id="rssOption1" name="choice" value="T4">
+        <label for="rssOption1">T4</label>
+        <input type="radio" id="rssOption2" name="choice" value="T5">
+        <label for="rssOption2">T5</label>
+        <input type="radio" id="rssOption3" name="choice" value="T4_T5">
+        <label for="rssOption3">T4_T5</label>
+        <br>
+        <span>Tổng số lính: <span id="totalTroopCanTrain">0</span></span>
+        <br>
+
+        <label>Cung: <span id="bowValue">0</span></label>
+        <input class="troopSlider" step="1" type="range" id="bow" min="0" max="900000" value="0">
+
+        <label>Phép: <span id="mageValue">0</span></label>
+        <input class="troopSlider" step="1" type="range" id="mage" min="0" max="900000" value="0">
+
+        <label>Kỵ: <span id="cavalryValue">0</span></label>
+        <input class="troopSlider" step="1" type="range" id="cavalry" min="0" max="900000" value="0">
+
+        <label>Bộ: <span id="infantryValue">0</span></label>
+        <input class="troopSlider" step="1" type="range" id="infantry" min="0" max="900000" value="0">
+        <br>
+        <span>Tổng tài nguyên:</span>
+        <span ">Vàng: <span id="totalGold">0</span></span>
+        <span ">Gỗ: <span id="totalWood">0</span></span>
+        <span ">Đá: <span id="totalStone">0</span></span>
+        <span ">Mana: <span id="totalMana">0</span></span>
+    </section>
+    
+    <section class="panel">
+    <h2>Tính speed với số lượng quân đã biết</h2>
+    <div class="speed-grid">
+    <label>Loại lính
+    <select id="selectTroopType">
+        <optgroup label="Train thẳng" class="train-group">
+            <option value="15000.25">T1</option><option value="30000.5">T2</option>
+            <option value="60001">T3</option><option value="80000.85">T4</option><option value="120000.55">T5</option>
+        </optgroup>
+        <optgroup label="Lên T4" class="t4-group">
+            <option value="65000.6">T1 lên T4</option><option value="50000.35">T2 lên T4</option><option value="19999.85">T3 lên T4</option>
+        </optgroup>
+        <optgroup label="Lên T5" class="t5-group">
+            <option value="105000.3">T1 lên T5</option><option value="90000.05">T2 lên T5</option><option value="59999.55">T3 lên T5</option><option value="39999.7">T4 lên T5</option>
+        </optgroup>
+    </select>
+    </label>
+    <label>Số lượng
+        <input type="number" id="quantityTroops" placeholder="Số lượng lính" />
+    </label>
+    <button onclick="CalculateSpeed()">Tính lượng speed</button>
+    </div>
+    <div id="resultSpeed"></div>
+    </section>
+
+
+    </main>
+</body>
+</html>
