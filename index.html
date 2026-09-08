@@ -31,6 +31,7 @@
         }
         label { display: grid; gap: 5px; font-size: 13px; color: #546e7a; }
         input, select, button { width: 100%; padding: 9px 10px; font: inherit; }
+        input[type="radio"] { width: auto; }
         input, select { border: 1px solid #b0bec5; border-radius: 4px; background: #fff; }
         select optgroup { font-weight: 600; }
         select optgroup.train-group { background: #e8f1fb; color: #24527a; }
@@ -63,12 +64,17 @@
         .troop-row label { display: block; }
         .rss-summary { display: flex; flex-wrap: wrap; gap: 8px 16px; margin-top: 16px; }
         @media (max-width: 700px) {
-            body { padding: 14px; }
+            body { padding: 12px; }
+            .panel { padding: 14px; }
+            input, select, button { padding: 12px; font-size: 16px; }
             .form-grid, .speed-grid { grid-template-columns: 1fr 1fr; }
             .form-grid button, .speed-grid button { grid-column: 1 / -1; }
+            .rss-toolbar { display: grid; grid-template-columns: 1fr auto; }
+            .rss-options { grid-column: 1 / -1; }
             .rss-total { margin-left: 0; }
             .troop-row { grid-template-columns: 1fr auto; }
             .troop-row label { grid-column: 1 / -1; }
+            .reset-button, .select-all-button { min-width: 92px; }
         }
     </style>
 </head>
