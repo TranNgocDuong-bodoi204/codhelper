@@ -204,35 +204,37 @@ function OnRadioSelector(select) {
 }
 
 function onTroopInputChange(input) {
-    const preInput = RSS_Cal_Element.input[input.id].value || 0;
-    const used = init_totalTroops - totalTroopRemain;
-    const except = used - preInput;
-    const i = NumberUnFormat(input.value);
-
-    const newSumTotal = except + i;
-
-    const v = (newSumTotal <= init_totalTroops) ? i : init_totalTroops - except;
-    input.value = v;
-    RSS_Cal_Element.input[input.id].value = v;
-
-    let totalRemaining = init_totalTroops;
-
-    CalculateRSSValue();
-
+    const totalTroops = NumberUnFormat(init_totalTroops);
+    let otherInputsTotal = 0;
     for(const key in RSS_Cal_Element.input)
     {
-        const obj = RSS_Cal_Element.input[key]
-        totalRemaining -= obj.value;
+        if (key !== input.id) {
+            otherInputsTotal += RSS_Cal_Element.input[key].value;
+        }
     }
-    totalTroopRemain = totalRemaining;
-    RSS_Cal_Element.totalTroop.textContent = NumberFormat(totalRemaining);
+
+    const maxValue = Math.max(0, totalTroops - otherInputsTotal);
+    const value = Math.min(Math.max(0, NumberUnFormat(input.value)), maxValue);
+
+    input.value = value;
+    RSS_Cal_Element.input[input.id].value = value;
+    UpdateTroopTotals();
 }
 function SelectAllRemainingTroops(inputId) {
     const input = document.getElementById(inputId);
     if (!input) return;
 
     const currentValue = RSS_Cal_Element.input[inputId].value || 0;
-    input.value = currentValue + totalTroopRemain;
+    let otherInputsTotal = 0;
+
+    for (const key in RSS_Cal_Element.input) {
+        if (key !== inputId) {
+            otherInputsTotal += RSS_Cal_Element.input[key].value;
+        }
+    }
+
+    const available = Math.max(0, NumberUnFormat(init_totalTroops) - otherInputsTotal);
+    input.value = currentValue + available;
     onTroopInputChange(input);
 }
 function ResetTroopInputs() {
@@ -241,7 +243,15 @@ function ResetTroopInputs() {
         document.getElementById(key).value = "";
     }
 
+    UpdateTroopTotals();
+}
+function UpdateTroopTotals() {
     totalTroopRemain = NumberUnFormat(init_totalTroops);
+
+    for (const key in RSS_Cal_Element.input) {
+        totalTroopRemain -= RSS_Cal_Element.input[key].value;
+    }
+
     RSS_Cal_Element.totalTroop.textContent = NumberFormat(totalTroopRemain);
     CalculateRSSValue();
 }
