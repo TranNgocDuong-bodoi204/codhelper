@@ -45,10 +45,30 @@
         td:not(:first-child), th:not(:first-child) { text-align: right; }
         .speed-grid { display: grid; grid-template-columns: 1fr 1fr auto; gap: 10px; align-items: end; }
         #resultSpeed { margin-top: 14px; line-height: 1.6; }
+        .rss-toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 10px 16px;
+            margin: 12px 0 16px;
+        }
+        .rss-options { display: flex; gap: 8px; align-items: center; }
+        .rss-options label { display: inline; }
+        .rss-total { margin-left: auto; font-weight: 600; }
+        .reset-button, .select-all-button { width: auto; padding: 6px 10px; font-size: 13px; }
+        .reset-button { background: #607d8b; }
+        .reset-button:hover { background: #455a64; }
+        .troop-inputs { display: grid; gap: 8px; }
+        .troop-row { display: grid; grid-template-columns: 120px 1fr auto; gap: 8px; align-items: center; }
+        .troop-row label { display: block; }
+        .rss-summary { display: flex; flex-wrap: wrap; gap: 8px 16px; margin-top: 16px; }
         @media (max-width: 700px) {
             body { padding: 14px; }
             .form-grid, .speed-grid { grid-template-columns: 1fr 1fr; }
             .form-grid button, .speed-grid button { grid-column: 1 / -1; }
+            .rss-total { margin-left: 0; }
+            .troop-row { grid-template-columns: 1fr auto; }
+            .troop-row label { grid-column: 1 / -1; }
         }
     </style>
 </head>
@@ -130,33 +150,48 @@
     <section class="panel">
         <span>rss calculate</span>
 
-        <input type="radio" id="rssOption1" name="choice" value="T4">
-        <label for="rssOption1">T4</label>
-        <input type="radio" id="rssOption2" name="choice" value="T5">
-        <label for="rssOption2">T5</label>
-        <input type="radio" id="rssOption3" name="choice" value="T4_T5">
-        <label for="rssOption3">T4_T5</label>
-        <br>
-        <span>Tổng số lính: <span id="totalTroopCanTrain">0</span></span>
-        <br>
+        <div class="rss-toolbar">
+            <div class="rss-options">
+                <input type="radio" id="rssOption1" name="choice" value="T4">
+                <label for="rssOption1">T4</label>
+                <input type="radio" id="rssOption2" name="choice" value="T5">
+                <label for="rssOption2">T5</label>
+                <input type="radio" id="rssOption3" name="choice" value="T4_T5">
+                <label for="rssOption3">T4 + T5</label>
+            </div>
+            <span class="rss-total">Còn lại: <span id="totalTroopCanTrain">0</span></span>
+            <button class="reset-button" type="button" onclick="ResetTroopInputs()">Reset</button>
+        </div>
 
-        <label>Cung: <span id="bowValue">0</span></label>
-        <input class="troopSlider" step="1" type="range" id="bow" min="0" max="900000" value="0">
+        <div class="troop-inputs">
+            <div class="troop-row">
+                <label for="archerInput">Cung <span id="archerLable"></span></label>
+                <input name="troopInput" type="number" id="archerInput" value="">
+                <button class="select-all-button" type="button" onclick="SelectAllRemainingTroops('archerInput')">Chọn hết</button>
+            </div>
+            <div class="troop-row">
+                <label for="mageInput">Phép <span id="mageLable"></span></label>
+                <input name="troopInput" type="number" id="mageInput" value="">
+                <button class="select-all-button" type="button" onclick="SelectAllRemainingTroops('mageInput')">Chọn hết</button>
+            </div>
+            <div class="troop-row">
+                <label for="cavalryInput">Kỵ <span id="cavalryLable"></span></label>
+                <input name="troopInput" type="number" id="cavalryInput" value="">
+                <button class="select-all-button" type="button" onclick="SelectAllRemainingTroops('cavalryInput')">Chọn hết</button>
+            </div>
+            <div class="troop-row">
+                <label for="infantryInput">Bộ <span id="infantryLable"></span></label>
+                <input name="troopInput" type="number" id="infantryInput" value="">
+                <button class="select-all-button" type="button" onclick="SelectAllRemainingTroops('infantryInput')">Chọn hết</button>
+            </div>
+        </div>
 
-        <label>Phép: <span id="mageValue">0</span></label>
-        <input class="troopSlider" step="1" type="range" id="mage" min="0" max="900000" value="0">
-
-        <label>Kỵ: <span id="cavalryValue">0</span></label>
-        <input class="troopSlider" step="1" type="range" id="cavalry" min="0" max="900000" value="0">
-
-        <label>Bộ: <span id="infantryValue">0</span></label>
-        <input class="troopSlider" step="1" type="range" id="infantry" min="0" max="900000" value="0">
-        <br>
-        <span>Tổng tài nguyên:</span>
-        <span ">Vàng: <span id="totalGold">0</span></span>
-        <span ">Gỗ: <span id="totalWood">0</span></span>
-        <span ">Đá: <span id="totalStone">0</span></span>
-        <span ">Mana: <span id="totalMana">0</span></span>
+        <div class="rss-summary">
+            <span>Vàng: <span id="totalGold">0</span></span>
+            <span>Gỗ: <span id="totalWood">0</span></span>
+            <span>Đá: <span id="totalStone">0</span></span>
+            <span>Mana: <span id="totalMana">0</span></span>
+        </div>
     </section>
     
     <section class="panel">

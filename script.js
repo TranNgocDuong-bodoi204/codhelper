@@ -17,30 +17,70 @@ const rss_general_T4_mana_ = 100;
 const rss_general_T5_mana = 400;
 const rss_general_T4_T5_mana = 300;
 
-const mage_rss = {
-    T4: { gold: 0, wood: 300, stone: 225 },
-    T5: { gold: 0, wood: 800, stone: 600 },
-    T4_T5: { gold: 0, wood: 500, stone: 375 },
-};
-const archer_rss = {
-    T4: { gold: 300, wood: 0, stone: 225 },
-    T5: { gold: 800, wood: 0, stone: 600 },
-    T4_T5: { gold: 500, wood: 0, stone: 375 },
-};
-const infantry_rss = {
-    T4: { gold: 300, wood: 300, stone: 0 },
-    T5: { gold: 800, wood: 800, stone: 0 },
-    T4_T5: { gold: 500, wood: 500, stone: 0 },
-};
-const cavalry_rss = {
-    T4: { gold: 180, wood: 180, stone: 180 },
-    T5: { gold: 480, wood: 480, stone: 480 },
-    T4_T5: { gold: 300, wood: 300, stone: 300 },
-};
+const RSS_data = {
+    mage : {
+        T4: { gold: 0, wood: 300, stone: 225 },
+        T5: { gold: 0, wood: 800, stone: 600 },
+        T4_T5: { gold: 0, wood: 500, stone: 375 },
+    },
+    archer : {
+        T4: { gold: 300, wood: 0, stone: 225 },
+        T5: { gold: 800, wood: 0, stone: 600 },
+        T4_T5: { gold: 500, wood: 0, stone: 375 },
+    },
+    infantry : {
+        T4: { gold: 300, wood: 300, stone: 0 },
+        T5: { gold: 800, wood: 800, stone: 0 },
+        T4_T5: { gold: 500, wood: 500, stone: 0 },
+    },
+    cavalry : {
+        T4: { gold: 180, wood: 180, stone: 180 },
+        T5: { gold: 480, wood: 480, stone: 480 },
+        T4_T5: { gold: 300, wood: 300, stone: 300 },
+    }
+}
 
 
-let amount_troop_rss = 0;
+let init_totalTroops = 0;
+let totalTroopRemain = 0;
 let troop_tier_rss = "T5";
+
+let rss_value = {
+    gold : 0,
+    wood : 0,
+    stone : 0,
+    mana : 0,
+
+    AddData(g,w,s,m)
+    {
+        this.gold += g
+        this.wood += w
+        this.stone += s
+        this.mana += m
+    }
+}
+
+const RSS_Cal_Element = {
+    totalTroop: document.getElementById("totalTroopCanTrain"),
+    input:{
+        archerInput: {
+            value : 0,
+            lable : document.getElementById("archerLable")
+        },
+        mageInput:{
+            value: 0,
+            lable: document.getElementById("mageLable")
+        },
+        cavalryInput:{
+            value: 0,
+            lable: document.getElementById("cavalryLable")
+        },
+        infantryInput:{
+            value: 0,
+            lable: document.getElementById("infantryLable")
+        }
+    }
+};
 
 function CalculateQuantityTroops() {
     const days = parseFloat(document.getElementById("daysNumber").value) || 0;
@@ -130,7 +170,7 @@ function CalculateSpeed() {
 // radio select troop type
 function StartCalculateResources() {
     addEventForRadioTroop()
-    addEventForTroopSlider()
+    addEventForTroopInput()
 }
 
 function  addEventForRadioTroop(params) {
@@ -139,43 +179,120 @@ function  addEventForRadioTroop(params) {
     });   
 }
 
+function  addEventForTroopInput(params) {
+    document.querySelectorAll('input[name="troopInput"]').forEach((input) =>
+    {
+        input.addEventListener("input", () => onTroopInputChange(input));
+    }
+    );
+}
+
 function OnRadioSelector(select) {
     const quantityId =
         select === "T4" ? "t4Q" : select === "T5" ? "t5Q" : "t4T5Q";
-    amount_troop_rss = document
+    init_totalTroops = NumberUnFormat(document
         .getElementById(quantityId)
-        .textContent.replace(/\./g, "")
-        .replace(/,/g, "");
+        .textContent);
+    totalTroopRemain = init_totalTroops;
     troop_tier_rss = select;
-    const total = document.getElementById("totalTroopCanTrain");
-    total.textContent = NumberFormat(parseInt(amount_troop_rss));
-    // khi tick xong sẽ set max cho sliders bằng amount of troop
-    firstSetSliderMaxValue(amount_troop_rss);
+
+    RSS_Cal_Element.totalTroop.textContent = NumberFormat(
+        init_totalTroops,
+    );
+
+    CalculateRSSValue();
 }
 
-function addEventForTroopSlider(params) {
-    const sliders = document.querySelectorAll(".troopSlider");
-    sliders.forEach(slider => {
-        slider.addEventListener('input',() => {onTroopSliderChanged(slider)});
-    });
+function onTroopInputChange(input) {
+    const preInput = RSS_Cal_Element.input[input.id].value || 0;
+    const used = init_totalTroops - totalTroopRemain;
+    const except = used - preInput;
+    const i = NumberUnFormat(input.value);
+
+    const newSumTotal = except + i;
+
+    const v = (newSumTotal <= init_totalTroops) ? i : init_totalTroops - except;
+    input.value = v;
+    RSS_Cal_Element.input[input.id].value = v;
+
+    let totalRemaining = init_totalTroops;
+
+    CalculateRSSValue();
+
+    for(const key in RSS_Cal_Element.input)
+    {
+        const obj = RSS_Cal_Element.input[key]
+        totalRemaining -= obj.value;
+    }
+    totalTroopRemain = totalRemaining;
+    RSS_Cal_Element.totalTroop.textContent = NumberFormat(totalRemaining);
+}
+function SelectAllRemainingTroops(inputId) {
+    const input = document.getElementById(inputId);
+    if (!input) return;
+
+    const currentValue = RSS_Cal_Element.input[inputId].value || 0;
+    input.value = currentValue + totalTroopRemain;
+    onTroopInputChange(input);
+}
+function ResetTroopInputs() {
+    for (const key in RSS_Cal_Element.input) {
+        RSS_Cal_Element.input[key].value = 0;
+        document.getElementById(key).value = "";
+    }
+
+    totalTroopRemain = NumberUnFormat(init_totalTroops);
+    RSS_Cal_Element.totalTroop.textContent = NumberFormat(totalTroopRemain);
+    CalculateRSSValue();
+}
+function CalculateRSSValue() {
+    rss_value.gold = 0;
+    rss_value.wood = 0;
+    rss_value.stone = 0;
+    rss_value.mana = 0;
+
+    for (const key in RSS_Cal_Element.input) {
+        const value = RSS_Cal_Element.input[key].value;
+        RSSCalculate(value, key, troop_tier_rss);
+    }
+
+    document.getElementById("totalGold").textContent = NumberFormat(rss_value.gold);
+    document.getElementById("totalWood").textContent = NumberFormat(rss_value.wood);
+    document.getElementById("totalStone").textContent = NumberFormat(rss_value.stone);
+    document.getElementById("totalMana").textContent = NumberFormat(rss_value.mana);
+}
+function RSSCalculate(value, id,tier) {
+    let type = id.replace("Input", "")
+    const data = RSS_data[type][tier]
+
+    let gold = value * data.gold
+    let wood = value * data.wood
+    let stone = value * data.stone
+    let mana = value * GetManaData(tier)
+
+    rss_value.AddData(gold,wood,stone,mana)
+}
+function GetManaData(tier) {
+    return (tier === "T4") ? rss_general_T4_mana_ 
+    : (tier === "T5") ? rss_general_T5_mana 
+    : rss_general_T4_T5_mana
 }
 
-function onTroopSliderChanged(slider) {
-    
+function getInitTotalTroop() {
+    return init_totalTroops;
 }
-
-function  firstSetSliderMaxValue(params) {
-    /** @type {NodeListOf<HTMLInputElement>} */
-    const sliders = document.querySelectorAll(".troopSlider");
-    sliders.forEach(slider=>{
-        slider.max = params
-    });
+function setInitTotalTroop(params) {
+    init_totalTroops = params
 }
-
-
 
 function NumberFormat(params) {
     return params.toLocaleString("vi-VN")
+}
+function NumberUnFormat(params) {
+    if (!params) return 0;
+    // Xóa tất cả dấu chấm (.) hoặc phẩy (,) có trong chuỗi
+    let n = params.toString().replace(/\./g, "").replace(/,/g, "");
+    return Number(n) || 0;
 }
 
 StartCalculateResources();
