@@ -1,231 +1,640 @@
 <!DOCTYPE html>
-<html>
+<html lang="vi">
 <head>
-    <title>COD HELPER</title>
-    <script src="script.js" defer ></script>
-    <script src="helper.js" defer ></script>
-    <style>
-        * { box-sizing: border-box; }
-        body {
-            margin: 0;
-            padding: 24px;
-            font-family: Arial, sans-serif;
-            color: #263238;
-            background: #f4f6f8;
-        }
-        main { max-width: 1000px; margin: 0 auto; }
-        h1 { margin: 0 0 24px; font-size: 24px; }
-        h2 { margin: 28px 0 12px; font-size: 19px; color: #37474f; }
-        h3 { margin: 20px 0 8px; font-size: 16px; color: #546e7a; }
-        .panel {
-            padding: 18px;
-            background: #fff;
-            border: 1px solid #d9e0e5;
-            border-radius: 6px;
-        }
-        .form-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr) auto;
-            gap: 10px;
-            align-items: end;
-        }
-        label { display: grid; gap: 5px; font-size: 13px; color: #546e7a; }
-        input, select, button { width: 100%; padding: 9px 10px; font: inherit; }
-        input[type="radio"] { width: auto; }
-        input, select { border: 1px solid #b0bec5; border-radius: 4px; background: #fff; }
-        select optgroup { font-weight: 600; }
-        select optgroup.train-group { background: #e8f1fb; color: #24527a; }
-        select optgroup.t4-group { background: #edf5ed; color: #35613b; }
-        select optgroup.t5-group { background: #fff4e5; color: #76521f; }
-        button { border: 0; border-radius: 4px; color: #fff; background: #1976d2; cursor: pointer; }
-        button:hover { background: #1565c0; }
-        .table-wrap { overflow-x: auto; }
-        table { width: 100%; border-collapse: collapse; background: #fff; }
-        th, td { padding: 10px 12px; border: 1px solid #d9e0e5; text-align: left; }
-        th { background: #eceff1; font-weight: 600; }
-        td:not(:first-child), th:not(:first-child) { text-align: right; }
-        .speed-grid { display: grid; grid-template-columns: 1fr 1fr auto; gap: 10px; align-items: end; }
-        #resultSpeed { margin-top: 14px; line-height: 1.6; }
-        .rss-toolbar {
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            gap: 10px 16px;
-            margin: 12px 0 16px;
-        }
-        .rss-options { display: flex; gap: 8px; align-items: center; }
-        .rss-options label { display: inline; }
-        .rss-total { margin-left: auto; font-weight: 600; }
-        .reset-button, .select-all-button { width: auto; padding: 6px 10px; font-size: 13px; }
-        .reset-button { background: #607d8b; }
-        .reset-button:hover { background: #455a64; }
-        .troop-inputs { display: grid; gap: 8px; }
-        .troop-row { display: grid; grid-template-columns: 120px 1fr auto; gap: 8px; align-items: center; }
-        .troop-row label { display: block; }
-        .rss-summary { display: flex; flex-wrap: wrap; gap: 8px 16px; margin-top: 16px; }
-        @media (max-width: 700px) {
-            body { padding: 12px; }
-            .panel { padding: 14px; }
-            input, select, button { padding: 12px; font-size: 16px; }
-            .form-grid, .speed-grid { grid-template-columns: 1fr 1fr; }
-            .form-grid button, .speed-grid button { grid-column: 1 / -1; }
-            .rss-toolbar { display: grid; grid-template-columns: 1fr auto; }
-            .rss-options { grid-column: 1 / -1; }
-            .rss-total { margin-left: 0; }
-            .troop-row { grid-template-columns: 1fr auto; }
-            .troop-row label { grid-column: 1 / -1; }
-            .reset-button, .select-all-button { min-width: 92px; }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>COD HELPER</title>
+<script src="script.js" defer></script>
+<script src="helper.js" defer></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@500;600&display=swap');
+
+  :root{
+    --sky: #7fa3c4;
+    --sky-deep: #6c93b8;
+    --cream: #fdfaf1;
+    --cream-soft: #f1e9d4;
+    --ink: #1c2733;
+    --ink-soft: #52667a;
+    --ink-faint: #8296a8;
+    --orange: #e2643c;
+    --orange-deep: #b84a29;
+    --gold: #f0b429;
+    --radius-lg: 18px;
+    --radius-md: 12px;
+    --radius-sm: 8px;
+  }
+
+  *{ box-sizing: border-box; }
+
+  body{
+    margin:0;
+    padding: 28px 20px 60px;
+    background:
+      radial-gradient(circle at 8% 92%, rgba(255,255,255,0.16), transparent 40%),
+      radial-gradient(circle at 96% 12%, rgba(255,255,255,0.14), transparent 35%),
+      linear-gradient(180deg, var(--sky) 0%, var(--sky-deep) 100%);
+    background-attachment: fixed;
+    min-height: 100vh;
+    color: var(--ink);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    -webkit-font-smoothing: antialiased;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  /* --- decorative clouds --- */
+  .cloud{
+    position: fixed;
+    width: 100px; height: 42px;
+    background: rgba(255,255,255,0.55);
+    border-radius: 50px;
+    box-shadow:
+      32px -20px 0 -6px rgba(255,255,255,0.55),
+      -26px -12px 0 -10px rgba(255,255,255,0.42),
+      16px 12px 0 -8px rgba(255,255,255,0.4);
+    pointer-events:none;
+    z-index:0;
+  }
+  .cloud-1{ top: 6%; left: 3%; transform: scale(0.9); }
+  .cloud-2{ top: 3%; right: 6%; transform: scale(1.15); }
+  .cloud-3{ bottom: 5%; left: 8%; transform: scale(0.75); }
+  .cloud-4{ bottom: 10%; right: 4%; transform: scale(0.95); }
+  @media (max-width: 700px){ .cloud{ display:none; } }
+
+  main{ max-width: 1180px; margin: 0 auto; position: relative; z-index: 1; }
+
+  .page-head{
+    display:flex;
+    align-items:center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin: 0 0 22px;
+  }
+  .page-head .mark{
+    font-weight: 800;
+    font-size: 13px;
+    letter-spacing: 0.02em;
+    color: var(--ink);
+    padding: 7px 14px;
+    border: 2.5px solid var(--ink);
+    border-radius: 999px;
+    background: var(--cream);
+    box-shadow: 3px 3px 0 var(--ink);
+  }
+  .page-head h1{
+    margin:0;
+    font-size: 22px;
+    font-weight: 800;
+    color: #fff;
+    text-shadow: 2px 2px 0 rgba(28,39,51,0.35);
+  }
+
+  .layout{
+    display:grid;
+    grid-template-columns: 1.18fr 1fr;
+    gap: 22px;
+    align-items: start;
+  }
+  .col{ display:flex; flex-direction:column; gap: 22px; min-width:0; }
+
+  .panel{
+    background: var(--cream);
+    border: 2.5px solid var(--ink);
+    border-radius: var(--radius-lg);
+    padding: 18px 20px 20px;
+    box-shadow: 6px 6px 0 var(--ink);
+    position: relative;
+  }
+  .panel-head{
+    display:flex;
+    align-items:center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+  .panel-head h2{
+    margin:0;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--ink);
+  }
+  h3.sub{
+    margin: 0 0 10px;
+    font-size: 12.5px;
+    font-weight: 700;
+    color: var(--ink-soft);
+  }
+
+  label{
+    display:grid;
+    gap: 6px;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--ink-soft);
+  }
+  input, select, button{
+    font: inherit;
+    color: var(--ink);
+  }
+  input, select{
+    width:100%;
+    padding: 10px 12px;
+    background: #fff;
+    border: 2px solid var(--ink);
+    border-radius: var(--radius-md);
+    outline: none;
+    transition: box-shadow .15s ease, transform .1s ease;
+  }
+  input::placeholder{ color: var(--ink-faint); }
+  input:focus, select:focus{
+    box-shadow: 3px 3px 0 var(--gold);
+  }
+  select optgroup{ font-weight:700; background: #fff; color: var(--ink-soft); }
+
+  button{
+    border: 2.5px solid var(--ink);
+    border-radius: 999px;
+    cursor:pointer;
+    background: var(--orange);
+    color: #fff;
+    font-weight: 700;
+    padding: 10px 18px;
+    box-shadow: 4px 4px 0 var(--ink);
+    transition: transform .1s ease, box-shadow .1s ease;
+  }
+  button:hover{ transform: translate(-1px,-1px); box-shadow: 5px 5px 0 var(--ink); background: var(--orange-deep); }
+  button:active{ transform: translate(2px,2px); box-shadow: 2px 2px 0 var(--ink); }
+  button:focus-visible, input:focus-visible, select:focus-visible{
+    outline: 3px solid var(--gold);
+    outline-offset: 2px;
+  }
+
+  /* --- Thiet lap chung --- */
+  .setup-row{ max-width: 220px; }
+
+  /* --- Form grid: ngay/gio/phut --- */
+  .form-grid{
+    display:grid;
+    grid-template-columns: repeat(3, 1fr) auto;
+    gap: 10px;
+    align-items:end;
+    margin-bottom: 20px;
+  }
+  .form-grid button{ white-space:nowrap; border-radius: var(--radius-md); }
+
+  /* --- Tabs for troop tables --- */
+  .tabs{ margin-top: 4px; }
+  .tabs input[type="radio"]{ position:absolute; opacity:0; pointer-events:none; }
+  .tab-labels{
+    display:flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 4px;
+    background: var(--cream-soft);
+    border: 2px solid var(--ink);
+    border-radius: 999px;
+    margin-bottom: 14px;
+  }
+  .tab-labels label{
+    flex:1;
+    min-width: 90px;
+    text-align:center;
+    padding: 8px 10px;
+    border-radius: 999px;
+    font-size: 12.5px;
+    font-weight: 700;
+    color: var(--ink-soft);
+    cursor:pointer;
+    user-select:none;
+    transition: background .15s ease, color .15s ease;
+  }
+  .tab-labels label:hover{ color: var(--ink); }
+  #tabTrain:checked ~ .tab-labels label[for="tabTrain"],
+  #tabT4:checked ~ .tab-labels label[for="tabT4"],
+  #tabT5:checked ~ .tab-labels label[for="tabT5"]{
+    background: var(--gold);
+    color: var(--ink);
+  }
+  .tab-panel{ display:none; }
+  #tabTrain:checked ~ .tab-panels .panel-train{ display:block; }
+  #tabT4:checked ~ .tab-panels .panel-t4{ display:block; }
+  #tabT5:checked ~ .tab-panels .panel-t5{ display:block; }
+
+  .table-wrap{ overflow-x:auto; border-radius: var(--radius-md); border: 2px solid var(--ink); }
+  table{
+    width:100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    min-width: 420px;
+  }
+  th, td{
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--cream-soft);
+    text-align:left;
+    white-space: nowrap;
+  }
+  th{
+    font-weight: 700;
+    color: var(--ink);
+    font-size: 12px;
+    background: var(--cream-soft);
+  }
+  td{ font-family:'IBM Plex Mono', monospace; font-size: 12.5px; color: var(--ink-soft); }
+  td:first-child{ font-family:'Inter', sans-serif; font-weight:700; color: var(--ink); }
+  td:not(:first-child), th:not(:first-child){ text-align:right; }
+  tbody tr:last-child td{ border-bottom:0; }
+  tbody tr:hover td{ background: rgba(240,180,41,0.1); }
+
+  /* --- RSS panel --- */
+  .segmented{
+    display:flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 4px;
+    background: var(--cream-soft);
+    border: 2px solid var(--ink);
+    border-radius: 999px;
+  }
+  .segmented input[type="radio"]{ position:absolute; opacity:0; pointer-events:none; }
+  .segmented label{
+    flex:1;
+    min-width: 60px;
+    text-align:center;
+    padding: 8px 10px;
+    border-radius:999px;
+    font-size:12.5px;
+    font-weight:700;
+    color: var(--ink-soft);
+    white-space: nowrap;
+    cursor:pointer;
+    user-select:none;
+    transition: background .15s ease, color .15s ease;
+  }
+  .segmented input:checked + label{
+    background: var(--orange);
+    color: #fff;
+  }
+
+  .rss-hint{
+    margin: 0 0 14px;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--ink-soft);
+    background: var(--cream-soft);
+    border: 2px dashed var(--ink);
+    border-radius: var(--radius-md);
+    padding: 10px 12px;
+    line-height: 1.5;
+  }
+  .rss-hint b{ color: var(--ink); }
+
+  .rss-toolbar{
+    display:flex;
+    align-items:center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 14px;
+    flex-wrap: wrap;
+  }
+  .rss-total{
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--ink-soft);
+    background: var(--cream-soft);
+    border: 2px solid var(--ink);
+    border-radius: 999px;
+    padding: 7px 14px;
+    white-space:nowrap;
+    margin-bottom: 16px;
+  }
+  .rss-total span{
+    font-family:'IBM Plex Mono', monospace;
+    font-weight:700;
+    color: var(--ink);
+    font-size: 13.5px;
+  }
+  .reset-button{
+    width:auto;
+    padding: 8px 14px;
+    font-size:12.5px;
+    background: #fff;
+    color: var(--ink-soft);
+    box-shadow: 3px 3px 0 var(--ink);
+  }
+  .reset-button:hover{ background: var(--cream-soft); color: var(--ink); }
+
+  .troop-inputs{ display:grid; gap:10px; margin-bottom: 18px; }
+  .troop-row{
+    display:grid;
+    grid-template-columns: 78px 1fr auto;
+    gap: 10px;
+    align-items:center;
+  }
+  .troop-row label{
+    display:flex;
+    align-items:center;
+    gap: 7px;
+    font-size: 13px;
+    font-weight:700;
+    color: var(--ink);
+  }
+  .troop-row label::before{
+    content:"";
+    width: 9px; height: 9px;
+    border-radius: 50%;
+    border: 1.5px solid var(--ink);
+    flex-shrink:0;
+  }
+  .troop-row:nth-child(1) label::before{ background: var(--gold); }
+  .troop-row:nth-child(2) label::before{ background: #9db3d6; }
+  .troop-row:nth-child(3) label::before{ background: var(--sky); }
+  .troop-row:nth-child(4) label::before{ background: #a9c98f; }
+  .troop-row label span{ color: var(--ink-faint); font-weight:600; font-size:12px; }
+  .select-all-button{
+    width:auto;
+    padding: 9px 12px;
+    font-size: 12px;
+    background: #fff;
+    color: var(--ink-soft);
+    box-shadow: 3px 3px 0 var(--ink);
+  }
+  .select-all-button:hover{ background: var(--cream-soft); color: var(--ink); }
+
+  .rss-summary{
+    display:grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    padding-top: 16px;
+    border-top: 2px dashed var(--cream-soft);
+  }
+  .rss-summary span{
+    display:flex;
+    flex-direction:column;
+    gap: 4px;
+    font-size: 11.5px;
+    font-weight:600;
+    color: var(--ink-faint);
+    background: var(--cream-soft);
+    border: 2px solid var(--ink);
+    border-radius: var(--radius-md);
+    padding: 8px 10px;
+  }
+  .rss-summary span span{
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 14px;
+    font-weight:700;
+    background: none;
+    border: 0;
+    padding: 0;
+  }
+  .rss-summary span:nth-child(1) span{ color: var(--orange-deep); }
+  .rss-summary span:nth-child(2) span{ color: #5f7d3f; }
+  .rss-summary span:nth-child(3) span{ color: var(--sky-deep); }
+  .rss-summary span:nth-child(4) span{ color: #6d4f9c; }
+
+  /* --- Speed panel --- */
+  .speed-grid{
+    display:grid;
+    grid-template-columns: 1.2fr 1fr auto;
+    gap: 10px;
+    align-items:end;
+  }
+  #resultSpeed{
+    margin-top: 16px;
+    display:grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+  }
+  #resultSpeed p{
+    margin:0;
+    padding: 10px 8px;
+    background: var(--cream-soft);
+    border: 2px solid var(--ink);
+    border-radius: var(--radius-md);
+    text-align:center;
+    font-size: 11.5px;
+    font-weight: 600;
+    color: var(--ink-soft);
+  }
+
+  @media (max-width: 860px){
+    .layout{ grid-template-columns: 1fr; }
+  }
+
+  @media (max-width: 640px){
+    body{ padding: 18px 12px 40px; }
+    .panel{ padding: 15px; box-shadow: 4px 4px 0 var(--ink); }
+    input, select, button{ padding: 12px; font-size: 16px; }
+    .form-grid, .speed-grid{ grid-template-columns: 1fr 1fr; }
+    .form-grid button, .speed-grid button{ grid-column: 1 / -1; }
+    .rss-toolbar{ flex-direction: column; align-items: stretch; }
+    .segmented label{ font-size: 11.5px; padding: 8px 6px; }
+    .troop-row{ grid-template-columns: 1fr auto; }
+    .troop-row label{ grid-column: 1 / -1; }
+    .rss-summary{ grid-template-columns: 1fr 1fr; }
+    #resultSpeed{ grid-template-columns: 1fr 1fr; }
+    .setup-row{ max-width: none; }
+    .page-head h1{ font-size: 18px; }
+  }
+</style>
 </head>
 <body>
-    <main>
+
+  <span class="cloud cloud-1"></span>
+  <span class="cloud cloud-2"></span>
+  <span class="cloud cloud-3"></span>
+  <span class="cloud cloud-4"></span>
+
+<main>
+
+  <div class="page-head">
+    <span class="mark">COD</span>
     <h1>Tính toán quân đội và sự kiện</h1>
+  </div>
 
-    <section class="panel">
-    <h2>Thiết lập chung</h2>
-    <label>Buff (%)
-        <input type="number" id="buff" placeholder="Buff %" />
-    </label>
-    </section>
+  <div class="layout">
 
-    <section class="panel">
-    <h2>Tính số lượng quân với speed đã biết</h2>
-    <div class="form-grid">
-        <label>Ngày
-            <input type="number" id="daysNumber" placeholder="Ngày" />
+    <div class="col">
+
+      <section class="panel">
+        <div class="panel-head"><h2>Thiết lập chung</h2></div>
+        <label class="setup-row">Buff (%)
+          <input type="number" id="buff" placeholder="0">
         </label>
-        <label>Giờ
-            <input type="number" id="hoursNumber" placeholder="Giờ">
-        </label>
-        <label>Phút
-            <input type="number" id="minutesNumber" placeholder="Phút">
-        </label>
-        <button onclick="CalculateQuantityTroops()">Tính số lượng</button>
-    </div>
+      </section>
 
-    <h2>Train thẳng</h2>
-    <div class="table-wrap">
-    <table>
-        <tr>
-            <th>Loại lính</th>
-            <th>Số lượng</th>
-            <th>Điểm Lãnh chúa</th>
-            <th>Điểm Thiên đỉnh</th>
-        </tr>
-        <tr><td>T1</td><td id="t1Q"></td><td id="t1SglP">0</td><td id="t1GhP">0</td></tr>
-        <tr><td>T2</td><td id="t2Q"></td><td id="t2SglP">0</td><td id="t2GhP">0</td></tr>
-        <tr><td>T3</td><td id="t3Q"></td><td id="t3SglP">0</td><td id="t3GhP">0</td></tr>
-        <tr><td>T4</td><td id="t4Q"></td><td id="t4SglP">0</td><td id="t4GhP">0</td></tr>
-        <tr><td>T5</td><td id="t5Q"></td><td id="t5SglP">0</td><td id="t5GhP">0</td></tr>
-    </table>
-    </div>
+      <section class="panel">
+        <div class="panel-head"><h2>Tính số lượng quân với speed đã biết</h2></div>
 
-    <h2>Nâng cấp</h2>
-    <h3>Lên T4</h3>
-    <div class="table-wrap">
-    <table>
-        <tr>
-            <th>Nâng cấp</th>
-            <th>Số lượng</th>
-            <th>Điểm Lãnh chúa</th>
-            <th>Điểm Thiên đỉnh</th>
-        </tr>
-        <tr><td>T1 lên T4</td><td id="t1T4Q"></td><td id="t1T4SglP">0</td><td id="t1T4GhP">0</td></tr>
-        <tr><td>T2 lên T4</td><td id="t2T4Q"></td><td id="t2T4SglP">0</td><td id="t2T4GhP">0</td></tr>
-        <tr><td>T3 lên T4</td><td id="t3T4Q"></td><td id="t3T4SglP">0</td><td id="t3T4GhP">0</td></tr>
-    </table>
-    </div>
-
-    <h3>Lên T5</h3>
-    <div class="table-wrap">
-    <table>
-        <tr>
-            <th>Nâng cấp</th>
-            <th>Số lượng</th>
-            <th>Điểm Lãnh chúa</th>
-            <th>Điểm Thiên đỉnh</th>
-        </tr>
-        <tr><td>T1 lên T5</td><td id="t1T5Q"></td><td id="t1T5SglP">0</td><td id="t1T5GhP">0</td></tr>
-        <tr><td>T2 lên T5</td><td id="t2T5Q"></td><td id="t2T5SglP">0</td><td id="t2T5GhP">0</td></tr>
-        <tr><td>T3 lên T5</td><td id="t3T5Q"></td><td id="t3T5SglP">0</td><td id="t3T5GhP">0</td></tr>
-        <tr><td>T4 lên T5</td><td id="t4T5Q"></td><td id="t4T5SglP">0</td><td id="t4T5GhP">0</td></tr>
-    </table>
-    </div>
-    </section>
-    <section class="panel">
-        <span>rss calculate</span>
-
-        <div class="rss-toolbar">
-            <div class="rss-options">
-                <input type="radio" id="rssOption1" name="choice" value="T4">
-                <label for="rssOption1">T4</label>
-                <input type="radio" id="rssOption2" name="choice" value="T5">
-                <label for="rssOption2">T5</label>
-                <input type="radio" id="rssOption3" name="choice" value="T4_T5">
-                <label for="rssOption3">T4 + T5</label>
-            </div>
-            <span class="rss-total">Còn lại: <span id="totalTroopCanTrain">0</span></span>
-            <button class="reset-button" type="button" onclick="ResetTroopInputs()">Reset</button>
+        <div class="form-grid">
+          <label>Ngày
+            <input type="number" id="daysNumber" placeholder="0">
+          </label>
+          <label>Giờ
+            <input type="number" id="hoursNumber" placeholder="0">
+          </label>
+          <label>Phút
+            <input type="number" id="minutesNumber" placeholder="0">
+          </label>
+          <button onclick="CalculateQuantityTroops()">Tính số lượng</button>
         </div>
 
+        <div class="tabs">
+          <input type="radio" name="trainTabs" id="tabTrain" checked>
+          <input type="radio" name="trainTabs" id="tabT4">
+          <input type="radio" name="trainTabs" id="tabT5">
+
+          <div class="tab-labels">
+            <label for="tabTrain">Train thẳng</label>
+            <label for="tabT4">Lên T4</label>
+            <label for="tabT5">Lên T5</label>
+          </div>
+
+          <div class="tab-panels">
+
+            <div class="tab-panel panel-train">
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr><th>Loại lính</th><th>Số lượng</th><th>Điểm Lãnh chúa</th><th>Điểm Thiên đỉnh</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr><td>T1</td><td id="t1Q"></td><td id="t1SglP">0</td><td id="t1GhP">0</td></tr>
+                    <tr><td>T2</td><td id="t2Q"></td><td id="t2SglP">0</td><td id="t2GhP">0</td></tr>
+                    <tr><td>T3</td><td id="t3Q"></td><td id="t3SglP">0</td><td id="t3GhP">0</td></tr>
+                    <tr><td>T4</td><td id="t4Q"></td><td id="t4SglP">0</td><td id="t4GhP">0</td></tr>
+                    <tr><td>T5</td><td id="t5Q"></td><td id="t5SglP">0</td><td id="t5GhP">0</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="tab-panel panel-t4">
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr><th>Nâng cấp</th><th>Số lượng</th><th>Điểm Lãnh chúa</th><th>Điểm Thiên đỉnh</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr><td>T1 lên T4</td><td id="t1T4Q"></td><td id="t1T4SglP">0</td><td id="t1T4GhP">0</td></tr>
+                    <tr><td>T2 lên T4</td><td id="t2T4Q"></td><td id="t2T4SglP">0</td><td id="t2T4GhP">0</td></tr>
+                    <tr><td>T3 lên T4</td><td id="t3T4Q"></td><td id="t3T4SglP">0</td><td id="t3T4GhP">0</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="tab-panel panel-t5">
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr><th>Nâng cấp</th><th>Số lượng</th><th>Điểm Lãnh chúa</th><th>Điểm Thiên đỉnh</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr><td>T1 lên T5</td><td id="t1T5Q"></td><td id="t1T5SglP">0</td><td id="t1T5GhP">0</td></tr>
+                    <tr><td>T2 lên T5</td><td id="t2T5Q"></td><td id="t2T5SglP">0</td><td id="t2T5GhP">0</td></tr>
+                    <tr><td>T3 lên T5</td><td id="t3T5Q"></td><td id="t3T5SglP">0</td><td id="t3T5GhP">0</td></tr>
+                    <tr><td>T4 lên T5</td><td id="t4T5Q"></td><td id="t4T5SglP">0</td><td id="t4T5GhP">0</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+    <div class="col">
+
+      <section class="panel">
+        <div class="panel-head"><h2>Tính RSS cần dùng</h2></div>
+
+        <p class="rss-hint"><b>chọn loại quân muốn train bên dưới.</b></p>
+
+        <div class="rss-toolbar">
+          <div class="segmented">
+            <input type="radio" id="rssOption1" name="choice" value="T4"><label for="rssOption1">T4</label>
+            <input type="radio" id="rssOption2" name="choice" value="T5"><label for="rssOption2">T5</label>
+            <input type="radio" id="rssOption3" name="choice" value="T4_T5"><label for="rssOption3">T4=>T5</label>
+          </div>
+          <button class="reset-button" type="button" onclick="ResetTroopInputs()">Reset</button>
+        </div>
+
+        <div class="rss-total">Còn lại: <span id="totalTroopCanTrain">0</span></div>
+
         <div class="troop-inputs">
-            <div class="troop-row">
-                <label for="archerInput">Cung <span id="archerLable"></span></label>
-                <input name="troopInput" type="number" id="archerInput" value="">
-                <button class="select-all-button" type="button" onclick="SelectAllRemainingTroops('archerInput')">Chọn hết</button>
-            </div>
-            <div class="troop-row">
-                <label for="mageInput">Phép <span id="mageLable"></span></label>
-                <input name="troopInput" type="number" id="mageInput" value="">
-                <button class="select-all-button" type="button" onclick="SelectAllRemainingTroops('mageInput')">Chọn hết</button>
-            </div>
-            <div class="troop-row">
-                <label for="cavalryInput">Kỵ <span id="cavalryLable"></span></label>
-                <input name="troopInput" type="number" id="cavalryInput" value="">
-                <button class="select-all-button" type="button" onclick="SelectAllRemainingTroops('cavalryInput')">Chọn hết</button>
-            </div>
-            <div class="troop-row">
-                <label for="infantryInput">Bộ <span id="infantryLable"></span></label>
-                <input name="troopInput" type="number" id="infantryInput" value="">
-                <button class="select-all-button" type="button" onclick="SelectAllRemainingTroops('infantryInput')">Chọn hết</button>
-            </div>
+          <div class="troop-row">
+            <label for="archerInput">Cung <span id="archerLable"></span></label>
+            <input name="troopInput" type="number" id="archerInput" value="">
+            <button class="select-all-button" type="button" onclick="SelectAllRemainingTroops('archerInput')">Chọn hết</button>
+          </div>
+          <div class="troop-row">
+            <label for="mageInput">Phép <span id="mageLable"></span></label>
+            <input name="troopInput" type="number" id="mageInput" value="">
+            <button class="select-all-button" type="button" onclick="SelectAllRemainingTroops('mageInput')">Chọn hết</button>
+          </div>
+          <div class="troop-row">
+            <label for="cavalryInput">Kỵ <span id="cavalryLable"></span></label>
+            <input name="troopInput" type="number" id="cavalryInput" value="">
+            <button class="select-all-button" type="button" onclick="SelectAllRemainingTroops('cavalryInput')">Chọn hết</button>
+          </div>
+          <div class="troop-row">
+            <label for="infantryInput">Bộ <span id="infantryLable"></span></label>
+            <input name="troopInput" type="number" id="infantryInput" value="">
+            <button class="select-all-button" type="button" onclick="SelectAllRemainingTroops('infantryInput')">Chọn hết</button>
+          </div>
         </div>
 
         <div class="rss-summary">
-            <span>Vàng: <span id="totalGold">0</span></span>
-            <span>Gỗ: <span id="totalWood">0</span></span>
-            <span>Đá: <span id="totalStone">0</span></span>
-            <span>Mana: <span id="totalMana">0</span></span>
+          <span>Vàng<span id="totalGold">0</span></span>
+          <span>Gỗ<span id="totalWood">0</span></span>
+          <span>Đá<span id="totalStone">0</span></span>
+          <span>Mana<span id="totalMana">0</span></span>
         </div>
-    </section>
-    
-    <section class="panel">
-    <h2>Tính speed với số lượng quân đã biết</h2>
-    <div class="speed-grid">
-    <label>Loại lính
-    <select id="selectTroopType">
-        <optgroup label="Train thẳng" class="train-group">
-            <option value="15000.25">T1</option><option value="30000.5">T2</option>
-            <option value="60001">T3</option><option value="80000.85">T4</option><option value="120000.55">T5</option>
-        </optgroup>
-        <optgroup label="Lên T4" class="t4-group">
-            <option value="65000.6">T1 lên T4</option><option value="50000.35">T2 lên T4</option><option value="19999.85">T3 lên T4</option>
-        </optgroup>
-        <optgroup label="Lên T5" class="t5-group">
-            <option value="105000.3">T1 lên T5</option><option value="90000.05">T2 lên T5</option><option value="59999.55">T3 lên T5</option><option value="39999.7">T4 lên T5</option>
-        </optgroup>
-    </select>
-    </label>
-    <label>Số lượng
-        <input type="number" id="quantityTroops" placeholder="Số lượng lính" />
-    </label>
-    <button onclick="CalculateSpeed()">Tính lượng speed</button>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head"><h2>Tính speed với số lượng quân đã biết</h2></div>
+
+        <div class="speed-grid">
+          <label>Loại lính
+            <select id="selectTroopType">
+              <optgroup label="Train thẳng">
+                <option value="15000.25">T1</option>
+                <option value="30000.5">T2</option>
+                <option value="60001">T3</option>
+                <option value="80000.85">T4</option>
+                <option value="120000.55">T5</option>
+              </optgroup>
+              <optgroup label="Lên T4">
+                <option value="65000.6">T1 lên T4</option>
+                <option value="50000.35">T2 lên T4</option>
+                <option value="19999.85">T3 lên T4</option>
+              </optgroup>
+              <optgroup label="Lên T5">
+                <option value="105000.3">T1 lên T5</option>
+                <option value="90000.05">T2 lên T5</option>
+                <option value="59999.55">T3 lên T5</option>
+                <option value="39999.7">T4 lên T5</option>
+              </optgroup>
+            </select>
+          </label>
+          <label>Số lượng
+            <input type="number" id="quantityTroops" placeholder="0">
+          </label>
+          <button onclick="CalculateSpeed()">Tính speed</button>
+        </div>
+
+        <div id="resultSpeed"></div>
+      </section>
+
     </div>
-    <div id="resultSpeed"></div>
-    </section>
 
+  </div>
 
-    </main>
+</main>
 </body>
 </html>
