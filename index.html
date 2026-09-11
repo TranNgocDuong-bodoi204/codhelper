@@ -417,6 +417,23 @@
     font-weight: 600;
     color: var(--ink-soft);
   }
+  #eventTrainingResult{
+    display:grid;
+    gap: 8px;
+    margin-top: 16px;
+  }
+  #eventTrainingResult p{
+    margin:0;
+    padding: 10px 12px;
+    background: var(--cream-soft);
+    border: 2px solid var(--ink);
+    border-radius: var(--radius-md);
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--ink-soft);
+    line-height: 1.5;
+  }
+  #eventTrainingResult strong{ color: var(--ink); }
 
   @media (max-width: 860px){
     .layout{ grid-template-columns: 1fr; }
@@ -560,12 +577,12 @@
             <input type="radio" id="rssOption2" name="choice" value="T5"><label for="rssOption2">T5</label>
             <input type="radio" id="rssOption3" name="choice" value="T4_T5"><label for="rssOption3">T4=>T5</label>
           </div>
-          <button class="reset-button" type="button" onclick="ResetTroopInputs()">Reset</button>
         </div>
-
+        
         <div class="rss-total">Còn lại: <span id="totalTroopCanTrain">0</span></div>
-
+        
         <div class="troop-inputs">
+          <button class="reset-button" type="button" onclick="ResetTroopInputs()">Reset</button>
           <div class="troop-row">
             <label for="archerInput">Cung <span id="archerLable"></span></label>
             <input name="troopInput" type="number" id="archerInput" value="">
@@ -629,6 +646,41 @@
         </div>
 
         <div id="resultSpeed"></div>
+      </section>
+      <section class="panel">
+        <h2>Tính ngày luyện lính cho sự kiện</h2>
+        <label>Ngày bắt đầu sự kiện
+          <input type="date" id="eventDate">
+        </label>
+         <div class="speed-grid">
+          <label>Loại lính
+            <select id="eventTroopType">
+              <optgroup label="Train thẳng">
+                <option value="15000.25">T1</option>
+                <option value="30000.5">T2</option>
+                <option value="60001">T3</option>
+                <option value="80000.85">T4</option>
+                <option value="120000.55">T5</option>
+              </optgroup>
+              <optgroup label="Lên T4">
+                <option value="65000.6">T1 lên T4</option>
+                <option value="50000.35">T2 lên T4</option>
+                <option value="19999.85">T3 lên T4</option>
+              </optgroup>
+              <optgroup label="Lên T5">
+                <option value="105000.3">T1 lên T5</option>
+                <option value="90000.05">T2 lên T5</option>
+                <option value="59999.55">T3 lên T5</option>
+                <option value="39999.7">T4 lên T5</option>
+              </optgroup>
+            </select>
+          </label>
+          <label>Số lượng
+            <input type="number" id="eventTroopQuantity" placeholder="0" min="1">
+          </label>
+        </div>
+        <button type="button" onclick="CalculateEventTraining()">Tính toán</button>
+        <div id="eventTrainingResult" aria-live="polite"></div>
       </section>
 
     </div>

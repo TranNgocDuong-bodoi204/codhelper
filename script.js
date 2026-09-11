@@ -164,7 +164,65 @@ function CalculateSpeed() {
     const days = (baseline / (1 + buff) * (numberOfTroops / 1000)) / 86400;
     const wholeDays = Math.floor(days);
     const totalRemainingSeconds = Math.round((days - wholeDays) * 86400);
-    result.innerHTML = `<p>Days: ${wholeDays}</p><p>Hours: ${Math.floor(totalRemainingSeconds / 3600)}</p><p>Minutes: ${Math.floor((totalRemainingSeconds % 3600) / 60)}</p><p>Seconds: ${totalRemainingSeconds % 60}</p>`;
+    const hours = Math.floor(totalRemainingSeconds / 3600);
+    const minutes = Math.floor((totalRemainingSeconds % 3600) / 60);
+    result.innerHTML = `<p>Days: ${wholeDays}</p><p>Hours: ${hours}</p><p>Minutes: ${minutes}</p><p>Seconds: ${totalRemainingSeconds % 60}</p>`;
+
+    const daysI = document.getElementById("daysNumber");
+    const hoursI = document.getElementById("hoursNumber");
+    const minutesI = document.getElementById("minutesNumber");
+
+    daysI.value = wholeDays
+    hoursI.value = hours
+    minutesI.value = minutes
+    CalculateQuantityTroops()
+}
+
+function CalculateEventTraining() {
+    const eventDateValue = document.getElementById("eventDate").value;
+    const eventResult = document.getElementById("eventTrainingResult");
+    const quantity = Number(document.getElementById("eventTroopQuantity").value);
+    const baseline = Number(document.getElementById("eventTroopType").value);
+    const buff = (Number(document.getElementById("buff").value) || 0) / 100;
+
+    if (!eventDateValue || !Number.isFinite(quantity) || quantity <= 0 || !baseline) {
+        eventResult.innerHTML = "<p>Vui lòng nhập ngày sự kiện và số lượng lính hợp lệ.</p>";
+        return;
+    }
+
+    const now = new Date();
+    const eventStart = new Date(`${eventDateValue}T00:00:00`);
+    const secondsPerTroop = baseline / (1 + buff) / 1000;
+    const requestedTrainingSeconds = quantity * secondsPerTroop;
+    const idealStart = new Date(eventStart.getTime() - requestedTrainingSeconds * 1000);
+    const availableSeconds = Math.max(0, (eventStart.getTime() - now.getTime()) / 1000);
+    const displayQuantity = idealStart > now
+        ? quantity
+        : Math.floor(availableSeconds / secondsPerTroop);
+    const displayStart = idealStart > now ? idealStart : now;
+    const status = idealStart > now
+        ? "Có thể bắt đầu theo kế hoạch."
+        : "Thời điểm bắt đầu đã qua, số lượng được tính lại từ bây giờ.";
+
+    eventResult.innerHTML = `
+        <p><strong>Ngày bắt đầu luyện:</strong> ${FormatDateTime(displayStart)}</p>
+        <p><strong>Số lượng cần luyện:</strong> ${displayQuantity.toLocaleString("vi-VN")} lính</p>
+        <p><strong>Thời gian còn lại:</strong> ${FormatDuration(availableSeconds)}<br>${status}</p>`;
+}
+
+function FormatDateTime(date) {
+    return date.toLocaleString("vi-VN", {
+        day: "2-digit", month: "2-digit", year: "numeric",
+        hour: "2-digit", minute: "2-digit"
+    });
+}
+
+function FormatDuration(totalSeconds) {
+    const seconds = Math.max(0, Math.floor(totalSeconds));
+    const days = Math.floor(seconds / 86400);
+    const hours = Math.floor((seconds % 86400) / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+    return `${days} ngày ${hours} giờ ${minutes} phút`;
 }
 
 // radio select troop type
