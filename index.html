@@ -437,16 +437,7 @@
     font-weight:600;
     color: var(--text);
   }
-  .troop-row label::before{
-    content:"";
-    width: 8px; height: 8px;
-    border-radius: 50%;
-    flex-shrink:0;
-  }
-  .troop-row:nth-child(1) label::before{ background: #d8b26a; }
-  .troop-row:nth-child(2) label::before{ background: var(--mana); }
-  .troop-row:nth-child(3) label::before{ background: var(--stone); }
-  .troop-row:nth-child(4) label::before{ background: var(--wood); }
+
   .troop-row label span{ color: var(--text-faint); font-weight:500; font-size:11px; }
   .select-all-button{
     width:auto;
@@ -461,24 +452,54 @@
     padding-top: 18px;
     border-top: 1px dashed var(--border);
   }
-  .resource-card{
+.resource-card{
     display:flex;
     flex-direction:column;
+    align-items:center;
     gap: 4px;
     background: var(--bg-alt);
     border-radius: var(--radius-md);
-    padding: 10px 12px;
+    padding: 8px 10px;
+    text-align:center;
   }
-  .resource-card span{
+  .resource-icon{
+    width:36px;
+    height:36px;
+    display:grid;
+    place-items:center;
+  }
+  .resource-icon img{
+    width:28px;
+    height:28px;
+    object-fit:contain;
+  }
+
+  .troop-icon{
+    width:50px;
+    height:50px;
+    display:grid;
+    place-items:center;
+  }
+  .troop-icon img{
+    width:35px;
+    height:35px;
+    object-fit:contain;
+  }
+
+  .resource-card > span:not(.resource-icon){
     font-size: 11px;
     font-weight:600;
     color: var(--text-soft);
   }
   .resource-card strong{
     font-family:'IBM Plex Mono', monospace;
-    font-size: 14px;
+    font-size: 13.5px;
     font-weight:700;
   }
+  .resource-card:nth-child(1) .resource-icon{ color:var(--gold); background:rgba(184,134,60,.14); }
+  .resource-card:nth-child(2) .resource-icon{ color:var(--wood); background:rgba(95,138,82,.14); }
+  .resource-card:nth-child(3) .resource-icon{ color:var(--stone); background:rgba(95,127,151,.14); }
+  .resource-card:nth-child(4) .resource-icon{ color:var(--mana); background:rgba(124,98,163,.14); }
   .resource-card:nth-child(1) strong{ color:var(--gold); }
   .resource-card:nth-child(2) strong{ color:var(--wood); }
   .resource-card:nth-child(3) strong{ color:var(--stone); }
@@ -708,45 +729,74 @@
 
       <div class="troop-inputs">
         <div class="troop-row">
-          <label for="archerInput">Cung <span id="archerLable"></span></label>
+          <label for="archerInput">
+            <span class="troop-icon">
+              <img src="images/arhcer.png" alt="Icon vàng">
+            </span>
+            Cung <span id="archerLable"></span>
+          </label>
           <input class="formatted-number" name="troopInput" type="text" inputmode="numeric" id="archerInput" value="">
           <button class="ghost-button select-all-button" type="button" onclick="SelectAllRemainingTroops('archerInput')">Chọn hết</button>
         </div>
         <div class="troop-row">
-          <label for="mageInput">Phép <span id="mageLable"></span></label>
+          <label for="mageInput">
+            <span class="troop-icon">
+              <img src="images/mage.png" alt="Icon vàng">
+            </span>
+            Phép <span id="mageLable"></span></label>
           <input class="formatted-number" name="troopInput" type="text" inputmode="numeric" id="mageInput" value="">
           <button class="ghost-button select-all-button" type="button" onclick="SelectAllRemainingTroops('mageInput')">Chọn hết</button>
         </div>
         <div class="troop-row">
-          <label for="cavalryInput">Kỵ <span id="cavalryLable"></span></label>
+          <label for="cavalryInput">
+            <span class="troop-icon">
+              <img src="images/carvaly.png" alt="Icon vàng">
+            </span>
+            Kỵ <span id="cavalryLable"></span></label>
           <input class="formatted-number" name="troopInput" type="text" inputmode="numeric" id="cavalryInput" value="">
           <button class="ghost-button select-all-button" type="button" onclick="SelectAllRemainingTroops('cavalryInput')">Chọn hết</button>
         </div>
         <div class="troop-row">
-          <label for="infantryInput">Bộ <span id="infantryLable"></span></label>
+          <label for="infantryInput">
+            <span class="troop-icon">
+              <img src="images/infantry.png" alt="Icon vàng">
+            </span>
+            Bộ <span id="infantryLable"></span></label>
           <input class="formatted-number" name="troopInput" type="text" inputmode="numeric" id="infantryInput" value="">
           <button class="ghost-button select-all-button" type="button" onclick="SelectAllRemainingTroops('infantryInput')">Chọn hết</button>
         </div>
       </div>
 
       <div class="rss-summary">
-        <div class="resource-card">
-          <span>Vàng</span>
-          <strong id="totalGold">0</strong>
+          <div class="resource-card">
+            <span class="resource-icon">
+              <img src="images/gold.webp" alt="Icon vàng">
+            </span>
+            <span>Vàng</span>
+            <strong id="totalGold">0</strong>
+          </div>
+          <div class="resource-card">
+            <span class="resource-icon">
+              <img src="images/wood.webp" alt="Icon gỗ">
+            </span>
+            <span>Gỗ</span>
+            <strong id="totalWood">0</strong>
+          </div>
+          <div class="resource-card">
+            <span class="resource-icon">
+              <img src="images/ore.webp" alt="Icon đá">
+            </span>
+            <span>Đá</span>
+            <strong id="totalStone">0</strong>
+          </div>
+          <div class="resource-card">
+            <span class="resource-icon">
+              <img src="images/mana.webp" alt="Icon mana">
+            </span>
+            <span>Mana</span>
+            <strong id="totalMana">0</strong>
+          </div>
         </div>
-        <div class="resource-card">
-          <span>Gỗ</span>
-          <strong id="totalWood">0</strong>
-        </div>
-        <div class="resource-card">
-          <span>Đá</span>
-          <strong id="totalStone">0</strong>
-        </div>
-        <div class="resource-card">
-          <span>Mana</span>
-          <strong id="totalMana">0</strong>
-        </div>
-      </div>
     </section>
 
     <section id="calculateTimeForEvent" class="card card-event">
