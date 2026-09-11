@@ -278,25 +278,30 @@ function CalculateEventTraining() {
       ? quantity
       : Math.floor(availableSeconds / secondsPerTroop);
   const displayStart = idealStart > now ? idealStart : now;
+  const nowCheck = idealStart <= now;
   const status =
     idealStart > now
       ? "Có thể bắt đầu theo kế hoạch."
       : "Thời điểm bắt đầu đã qua, số lượng được tính lại từ bây giờ.";
 
   eventResult.innerHTML = `
-        <p><strong>Ngày bắt đầu luyện:</strong> ${FormatDateTime(displayStart)}</p>
+        <p><strong>Ngày bắt đầu luyện:</strong> ${FormatDateTime(displayStart, nowCheck)}</p>
         <p><strong>Số lượng cần luyện:</strong> ${displayQuantity.toLocaleString("vi-VN")} lính</p>
-        <p><strong>Thời gian còn lại:</strong> ${FormatDuration(availableSeconds)}<br>${status}</p>`;
+        <p><strong>Thời gian còn lại đến sự kiện:</strong> ${FormatDuration(availableSeconds)}<br>${status}</p>`;
 }
 
-function FormatDateTime(date) {
-  return date.toLocaleString("vi-VN", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-  });
+function FormatDateTime(date, now) {
+    if(!now)
+    {
+            return date.toLocaleString("vi-VN", {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric",
+            hour: "2-digit",
+            minute: "2-digit",
+            });
+    }
+    return "Hôm nay"
 }
 
 function FormatDuration(totalSeconds) {
