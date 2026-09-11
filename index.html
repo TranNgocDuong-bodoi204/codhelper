@@ -30,6 +30,8 @@
 
   *{ box-sizing: border-box; }
 
+  html{ scroll-behavior: smooth; }
+
   body{
     margin:0;
     padding: 32px 20px 60px;
@@ -81,6 +83,78 @@
     margin: 0;
     font-size: 13.5px;
     color: var(--text-soft);
+  }
+  .page-nav{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    margin-top:16px;
+  }
+  .page-nav-label{
+    width:100%;
+    color:var(--text-faint);
+    font-size:11px;
+    font-weight:700;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+  }
+  .page-nav a{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    min-height:46px;
+    padding:9px 12px;
+    border:1px solid rgba(47,158,131,.2);
+    border-radius:var(--radius-md);
+    background:linear-gradient(135deg, rgba(255,255,255,.96), var(--accent-soft));
+    color:var(--text);
+    font-size:12.5px;
+    font-weight:700;
+    line-height:1.2;
+    text-decoration:none;
+    box-shadow:0 3px 10px rgba(31,60,50,.07);
+    transition:background .15s ease, border-color .15s ease, color .15s ease, transform .15s ease, box-shadow .15s ease;
+  }
+  .page-nav a::before{
+    content:counter(page-nav);
+    counter-increment:page-nav;
+    display:grid;
+    place-items:center;
+    width:22px;
+    height:22px;
+    border-radius:7px;
+    background:var(--accent);
+    color:#fff;
+    font-size:11px;
+    font-weight:800;
+    flex:0 0 auto;
+  }
+  .page-nav{ counter-reset:page-nav; }
+  .page-nav a::after{
+    content:"→";
+    margin-left:3px;
+    color:var(--accent-dark);
+    font-size:16px;
+    line-height:1;
+    transition:transform .15s ease;
+  }
+  .page-nav a:hover{
+    background:var(--surface);
+    border-color:rgba(47,158,131,.45);
+    color:var(--accent-dark);
+    transform:translateY(-2px);
+    box-shadow:0 8px 16px rgba(31,60,50,.12);
+  }
+  .page-nav a:hover::after{ transform:translateX(3px); }
+  .page-nav a:active{ transform:translateY(0); }
+  .page-nav a:focus-visible{
+    outline:2px solid var(--accent);
+    outline-offset:3px;
+  }
+  .card:target{
+    border-color:rgba(47,158,131,.65);
+    box-shadow:0 0 0 4px var(--accent-soft), 0 10px 24px -16px rgba(31,60,50,.18);
+    scroll-margin-top:20px;
   }
 
   /* --- global setup bar --- */
@@ -500,6 +574,12 @@
     .troop-row label{ grid-column: 1 / -1; }
     .rss-summary{ grid-template-columns: 1fr 1fr; }
     .setup-bar{ flex-wrap: wrap; }
+    .page-nav a{ flex:1 1 180px; justify-content:space-between; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior: auto; }
+    *, *::before, *::after{ transition-duration: .01ms !important; animation-duration: .01ms !important; }
   }
 </style>
 </head>
@@ -510,6 +590,12 @@
     <span class="mark">COD HELPER by TND</span>
     <h1>Công cụ tính toán cho game Call of Dragons</h1>
     <p>Quy đổi thời gian train, tính RSS cần dùng và lên kế hoạch luyện lính cho sự kiện.</p>
+    <nav class="page-nav" aria-label="Đi đến công cụ">
+      <span class="page-nav-label">Đi nhanh đến</span>
+      <a href="#calculateTroopAndSpeed">Speed và số lượng quân</a>
+      <a href="#calculateRSS">Tài nguyên RSS</a>
+      <a href="#calculateTimeForEvent">Lịch luyện sự kiện</a>
+    </nav>
   </div>
 
   <div class="setup-bar">
@@ -524,9 +610,9 @@
 
     <div class="col">
 
-      <section class="card">
+      <section id="calculateTroopAndSpeed" class="card">
         <div class="card-head">
-          <h2>Quy đổi thời gian ⇄ số lượng quân</h2>
+          <h2>Tính toán Speed và số lượng quân</h2>
           <p>Nhập thời gian để biết train được bao nhiêu lính, hoặc nhập số lượng lính để biết cần bao nhiêu thời gian — hai bên tự đồng bộ với nhau.</p>
         </div>
 
@@ -651,7 +737,7 @@
 
     <div class="col">
 
-      <section class="card">
+      <section id="calculateRSS" class="card">
         <div class="card-head"><h2>Tính RSS cần dùng</h2></div>
 
         <p class="rss-hint"><b>Bước 1:</b> chọn loại quân muốn train. <b>Bước 2:</b> nhập số lượng từng loại lính — RSS sẽ tự tính.</p>
@@ -723,7 +809,7 @@
 
       </section>
 
-      <section class="card">
+      <section id="calculateTimeForEvent" class="card">
         <div class="card-head">
           <h2>Tính thời gian bắt đầu luyện lính cho sự kiện.</h2>
           <p><b>Lưu ý nhập buff ở bên trên để có thể tính toán chính xác</b></p>
