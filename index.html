@@ -21,8 +21,10 @@
     --accent-dark: #257c68;
     --accent-soft: #e2f3ee;
     --gold: #b8863c;
+    --gold-soft: #f5ead4;
     --wood: #5f8a52;
     --stone: #5f7f97;
+    --stone-soft: #e6edf1;
     --mana: #7c62a3;
     --radius-lg: 16px;
     --radius-md: 10px;
@@ -58,7 +60,7 @@
             mask-image: radial-gradient(120% 100% at 50% 0%, #000 40%, transparent 90%);
   }
 
-  main{ max-width: 1180px; margin: 0 auto; position: relative; z-index: 1; }
+  main{ max-width: 980px; margin: 0 auto; position: relative; z-index: 1; }
 
   /* --- header --- */
   .page-head{ margin: 0 0 20px; }
@@ -84,78 +86,45 @@
     font-size: 13.5px;
     color: var(--text-soft);
   }
-  .page-nav{
+
+  /* --- quick nav (text-only, no icons) --- */
+  .quick-nav{
     display:flex;
     flex-wrap:wrap;
-    gap:8px;
-    margin-top:16px;
+    gap: 8px;
+    margin-top: 16px;
   }
-  .page-nav-label{
-    width:100%;
-    color:var(--text-faint);
-    font-size:11px;
-    font-weight:700;
-    letter-spacing:.08em;
-    text-transform:uppercase;
-  }
-  .page-nav a{
+  .quick-nav a{
     display:inline-flex;
     align-items:center;
-    gap:8px;
-    min-height:46px;
-    padding:9px 12px;
-    border:1px solid rgba(47,158,131,.2);
-    border-radius:var(--radius-md);
-    background:linear-gradient(135deg, rgba(255,255,255,.96), var(--accent-soft));
-    color:var(--text);
-    font-size:12.5px;
-    font-weight:700;
-    line-height:1.2;
-    text-decoration:none;
-    box-shadow:0 3px 10px rgba(31,60,50,.07);
-    transition:background .15s ease, border-color .15s ease, color .15s ease, transform .15s ease, box-shadow .15s ease;
+    gap: 8px;
+    padding: 8px 14px 8px 8px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text-soft);
+    font-size: 12.5px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background .15s ease, border-color .15s ease, color .15s ease;
   }
-  .page-nav a::before{
-    content:counter(page-nav);
-    counter-increment:page-nav;
-    display:grid;
-    place-items:center;
-    width:22px;
-    height:22px;
-    border-radius:7px;
-    background:var(--accent);
-    color:#fff;
-    font-size:11px;
-    font-weight:800;
-    flex:0 0 auto;
+  .quick-nav a:hover{
+    background: var(--bg-alt);
+    border-color: rgba(47,158,131,.35);
+    color: var(--text);
   }
-  .page-nav{ counter-reset:page-nav; }
-  .page-nav a::after{
-    content:"→";
-    margin-left:3px;
-    color:var(--accent-dark);
-    font-size:16px;
-    line-height:1;
-    transition:transform .15s ease;
+  .quick-nav .num{
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    display:grid; place-items:center;
+    font-size: 11px;
+    font-weight: 800;
+    color: #fff;
+    flex-shrink:0;
   }
-  .page-nav a:hover{
-    background:var(--surface);
-    border-color:rgba(47,158,131,.45);
-    color:var(--accent-dark);
-    transform:translateY(-2px);
-    box-shadow:0 8px 16px rgba(31,60,50,.12);
-  }
-  .page-nav a:hover::after{ transform:translateX(3px); }
-  .page-nav a:active{ transform:translateY(0); }
-  .page-nav a:focus-visible{
-    outline:2px solid var(--accent);
-    outline-offset:3px;
-  }
-  .card:target{
-    border-color:rgba(47,158,131,.65);
-    box-shadow:0 0 0 4px var(--accent-soft), 0 10px 24px -16px rgba(31,60,50,.18);
-    scroll-margin-top:20px;
-  }
+  .quick-nav a[href="#calculateTroopAndSpeed"] .num{ background: var(--accent); }
+  .quick-nav a[href="#calculateRSS"] .num{ background: var(--gold); }
+  .quick-nav a[href="#calculateTimeForEvent"] .num{ background: var(--stone); }
 
   /* --- global setup bar --- */
   .setup-bar{
@@ -167,12 +136,12 @@
     border: 1px solid var(--border);
     border-radius: var(--radius-md);
     padding: 12px 16px;
-    margin-bottom: 20px;
+    margin: 20px 0 24px;
     box-shadow: 0 1px 2px rgba(31,60,50,0.03);
   }
   .setup-bar .setup-label{
     font-size: 13px;
-    font-weight: 600;
+    font-weight: 700;
     color: var(--text);
     white-space: nowrap;
   }
@@ -195,29 +164,50 @@
     min-width: 0;
   }
 
-  .layout{
-    display:grid;
-    grid-template-columns: 1.25fr 1fr;
-    gap: 20px;
-    align-items: start;
-  }
-  .col{ display:flex; flex-direction:column; gap: 20px; min-width:0; }
+  /* --- section cards --- */
+  .col{ display:flex; flex-direction:column; gap: 20px; }
 
   .card{
     background: var(--surface);
     border: 1px solid var(--border);
+    border-top: 3px solid var(--border);
     border-radius: var(--radius-lg);
-    padding: 20px 22px 22px;
+    padding: 22px 24px 24px;
     box-shadow: 0 1px 2px rgba(31,60,50,0.03), 0 10px 24px -16px rgba(31,60,50,0.12);
+    scroll-margin-top: 20px;
   }
-  .card-head{ margin-bottom: 16px; }
-  .card-head h2{
+  .card-speed{ border-top-color: var(--accent); }
+  .card-rss{ border-top-color: var(--gold); }
+  .card-event{ border-top-color: var(--stone); }
+
+  .card-head{
+    display:flex;
+    align-items:flex-start;
+    gap: 12px;
+    margin-bottom: 18px;
+  }
+  .section-index{
+    flex: 0 0 auto;
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    display:grid; place-items:center;
+    font-size: 12px;
+    font-weight: 800;
+    color: #fff;
+    margin-top: 1px;
+  }
+  .card-speed .section-index{ background: var(--accent); }
+  .card-rss .section-index{ background: var(--gold); }
+  .card-event .section-index{ background: var(--stone); }
+
+  .card-head-text{ flex:1; min-width:0; }
+  .card-head-text h2{
     margin: 0 0 4px;
-    font-size: 15.5px;
+    font-size: 16.5px;
     font-weight: 700;
     color: var(--text);
   }
-  .card-head p{
+  .card-head-text p{
     margin:0;
     font-size: 12.5px;
     color: var(--text-soft);
@@ -260,10 +250,9 @@
     color: #fff;
     font-weight: 600;
     padding: 10px 16px;
-    transition: background .15s ease, transform .05s ease;
+    transition: background .15s ease;
   }
   button:hover{ background: var(--accent-dark); }
-  button:active{ transform: scale(0.98); }
   button:focus-visible, input:focus-visible, select:focus-visible{
     outline: 2px solid var(--accent);
     outline-offset: 2px;
@@ -275,15 +264,15 @@
   }
   .ghost-button:hover{ background: var(--bg-alt); color: var(--text); }
 
-  /* --- convert card: dual input clusters --- */
+  /* --- Speed panel: dual input clusters --- */
   .dual-input{
     display:grid;
     grid-template-columns: 1fr 1fr;
-    gap: 20px;
-    margin-bottom: 18px;
+    gap: 24px;
+    margin-bottom: 20px;
   }
   .dual-input .cluster{
-    padding-left: 20px;
+    padding-left: 24px;
     border-left: 1px dashed var(--border);
   }
   .dual-input .cluster:first-child{ padding-left:0; border-left:0; }
@@ -292,7 +281,6 @@
     font-size: 12px;
     font-weight: 700;
     color: var(--text-faint);
-    text-transform: none;
   }
   .time-grid{
     display:grid;
@@ -321,7 +309,7 @@
     font-family:'IBM Plex Mono', monospace;
   }
 
-  /* --- tabs --- */
+  /* --- tabs (troop tables inside speed panel) --- */
   .tabs{ margin-top: 6px; }
   .tabs input[type="radio"]{ position:absolute; opacity:0; pointer-events:none; }
   .tab-labels{
@@ -342,7 +330,7 @@
     color: var(--text-soft);
     cursor:pointer;
     user-select:none;
-    transition: background .15s ease, color .15s ease, box-shadow .15s ease;
+    transition: background .15s ease, color .15s ease;
   }
   .tab-labels label:hover{ color: var(--text); }
   #tabTrain:checked ~ .tab-labels label[for="tabTrain"],
@@ -367,18 +355,18 @@
   tbody tr:last-child td{ border-bottom:0; }
   tbody tr:hover td{ background: var(--accent-soft); }
 
-  /* --- RSS card --- */
+  /* --- RSS panel --- */
   .rss-hint{
-    margin: 0 0 14px;
+    margin: 0 0 16px;
     font-size: 12.5px;
     font-weight: 500;
     color: var(--text-soft);
-    background: var(--accent-soft);
+    background: var(--gold-soft);
     border-radius: var(--radius-md);
     padding: 10px 12px;
     line-height: 1.5;
   }
-  .rss-hint b{ color: var(--accent-dark); }
+  .rss-hint b{ color: var(--gold); }
 
   .segmented{
     display:flex;
@@ -391,7 +379,7 @@
   .segmented label{
     flex:1;
     text-align:center;
-    padding: 7px 8px;
+    padding: 8px 8px;
     border-radius:999px;
     font-size:12.5px;
     font-weight:600;
@@ -399,11 +387,11 @@
     white-space: nowrap;
     cursor:pointer;
     user-select:none;
-    transition: background .15s ease, color .15s ease, box-shadow .15s ease;
+    transition: background .15s ease, color .15s ease;
   }
   .segmented input:checked + label{
     background: #fff;
-    color: var(--accent-dark);
+    color: var(--gold);
     box-shadow: 0 1px 3px rgba(31,60,50,0.12);
   }
 
@@ -412,7 +400,7 @@
     align-items:center;
     justify-content: space-between;
     gap: 12px;
-    margin-bottom: 14px;
+    margin: 16px 0 16px;
     flex-wrap: wrap;
   }
   .rss-total{
@@ -421,7 +409,6 @@
     gap: 8px;
     font-size: 12.5px;
     color: var(--text-soft);
-    margin-bottom: 16px;
   }
   .rss-total span{
     font-family:'IBM Plex Mono', monospace;
@@ -430,10 +417,15 @@
     font-size: 14px;
   }
 
-  .troop-inputs{ display:grid; gap:9px; margin-bottom: 18px; }
+  .troop-inputs{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px 16px;
+    margin-bottom: 20px;
+  }
   .troop-row{
     display:grid;
-    grid-template-columns: 76px 1fr auto;
+    grid-template-columns: 70px 1fr auto;
     gap: 8px;
     align-items:center;
   }
@@ -455,99 +447,60 @@
   .troop-row:nth-child(2) label::before{ background: var(--mana); }
   .troop-row:nth-child(3) label::before{ background: var(--stone); }
   .troop-row:nth-child(4) label::before{ background: var(--wood); }
-  .troop-row label span{ color: var(--text-faint); font-weight:500; font-size:11.5px; }
+  .troop-row label span{ color: var(--text-faint); font-weight:500; font-size:11px; }
   .select-all-button{
     width:auto;
     padding: 8px 10px;
-    font-size: 11.5px;
+    font-size: 11px;
   }
 
   .rss-summary{
     display:grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 8px;
-    padding-top: 16px;
+    gap: 10px;
+    padding-top: 18px;
     border-top: 1px dashed var(--border);
   }
-  .rss-summary span{
+  .resource-card{
     display:flex;
     flex-direction:column;
     gap: 4px;
-    font-size: 11px;
-    font-weight:600;
-    color: var(--text-faint);
     background: var(--bg-alt);
     border-radius: var(--radius-md);
-    padding: 8px 10px;
+    padding: 10px 12px;
   }
-  .rss-summary span span{
-    font-family:'IBM Plex Mono', monospace;
-    font-size: 13.5px;
-    font-weight:700;
-    background:none; padding:0;
-  }
-  .rss-summary span:nth-child(1) span{ color: var(--gold); }
-  .rss-summary span:nth-child(2) span{ color: var(--wood); }
-  .rss-summary span:nth-child(3) span{ color: var(--stone); }
-  .rss-summary span:nth-child(4) span{ color: var(--mana); }
-
-.resource-card{
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    gap: 4px;
-    background: var(--bg-alt);
-    border-radius: var(--radius-md);
-    padding: 8px 10px;
-    text-align:center;
-  }
-  .resource-icon{
-    width:36px;
-    height:36px;
-    display:grid;
-    place-items:center;
-  }
-  .resource-icon img{
-    width:28px;
-    height:28px;
-    object-fit:contain;
-  }
-  .resource-card > span:not(.resource-icon){
+  .resource-card span{
     font-size: 11px;
     font-weight:600;
     color: var(--text-soft);
   }
   .resource-card strong{
     font-family:'IBM Plex Mono', monospace;
-    font-size: 13.5px;
+    font-size: 14px;
     font-weight:700;
   }
-  .resource-card:nth-child(1) .resource-icon{ color:var(--gold); background:rgba(184,134,60,.14); }
-  .resource-card:nth-child(2) .resource-icon{ color:var(--wood); background:rgba(95,138,82,.14); }
-  .resource-card:nth-child(3) .resource-icon{ color:var(--stone); background:rgba(95,127,151,.14); }
-  .resource-card:nth-child(4) .resource-icon{ color:var(--mana); background:rgba(124,98,163,.14); }
   .resource-card:nth-child(1) strong{ color:var(--gold); }
   .resource-card:nth-child(2) strong{ color:var(--wood); }
   .resource-card:nth-child(3) strong{ color:var(--stone); }
   .resource-card:nth-child(4) strong{ color:var(--mana); }
 
-
-  /* --- event planner card --- */
-  .event-grid{
+  /* --- event planner panel --- */
+  .event-form-grid{
     display:grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1.1fr 1.3fr 1fr auto;
     gap: 10px;
-    margin: 14px 0 14px;
+    align-items:end;
+    margin: 14px 0 16px;
   }
   #eventTrainingResult{
     display:grid;
     gap: 8px;
-    margin-top: 14px;
+    margin-top: 6px;
   }
   #eventTrainingResult p{
     margin:0;
     padding: 10px 12px;
-    background: var(--bg-alt);
+    background: var(--stone-soft);
     border-radius: var(--radius-md);
     font-size: 12.5px;
     color: var(--text-soft);
@@ -555,8 +508,9 @@
   }
   #eventTrainingResult strong{ color: var(--text); font-weight: 700; }
 
-  @media (max-width: 860px){
-    .layout{ grid-template-columns: 1fr; }
+  @media (max-width: 760px){
+    .event-form-grid{ grid-template-columns: 1fr 1fr; }
+    .event-form-grid button{ grid-column: 1 / -1; }
   }
 
   @media (max-width: 640px){
@@ -568,13 +522,13 @@
     .dual-input .cluster:first-child{ padding-top:0; border-top:0; }
     .time-grid{ grid-template-columns: 1fr 1fr 1fr; }
     #resultSpeed{ grid-template-columns: 1fr 1fr; }
-    .event-grid{ grid-template-columns: 1fr; }
+    .event-form-grid{ grid-template-columns: 1fr; }
     .rss-toolbar{ flex-direction: column; align-items: stretch; }
+    .troop-inputs{ grid-template-columns: 1fr; }
     .troop-row{ grid-template-columns: 1fr auto; }
     .troop-row label{ grid-column: 1 / -1; }
     .rss-summary{ grid-template-columns: 1fr 1fr; }
     .setup-bar{ flex-wrap: wrap; }
-    .page-nav a{ flex:1 1 180px; justify-content:space-between; }
   }
 
   @media (prefers-reduced-motion: reduce){
@@ -590,11 +544,10 @@
     <span class="mark">COD HELPER by TND</span>
     <h1>Công cụ tính toán cho game Call of Dragons</h1>
     <p>Quy đổi thời gian train, tính RSS cần dùng và lên kế hoạch luyện lính cho sự kiện.</p>
-    <nav class="page-nav" aria-label="Đi đến công cụ">
-      <span class="page-nav-label">Đi nhanh đến</span>
-      <a href="#calculateTroopAndSpeed">Speed và số lượng quân</a>
-      <a href="#calculateRSS">Tài nguyên RSS</a>
-      <a href="#calculateTimeForEvent">Lịch luyện sự kiện</a>
+    <nav class="quick-nav" aria-label="Đi đến từng phần">
+      <a href="#calculateTroopAndSpeed"><span class="num">1</span>Speed &amp; số lượng quân</a>
+      <a href="#calculateRSS"><span class="num">2</span>RSS cần dùng</a>
+      <a href="#calculateTimeForEvent"><span class="num">3</span>Lịch luyện sự kiện</a>
     </nav>
   </div>
 
@@ -602,256 +555,243 @@
     <span class="setup-label">Thiết lập chung</span>
     <div class="setup-field">
       <input type="number" id="buff" placeholder="0">
-      <span>% buff train lính (áp dụng cho mọi tính toán bên dưới)</span>
+      <span>% buff train lính (áp dụng cho mọi công cụ bên dưới)</span>
     </div>
   </div>
 
-  <div class="layout">
+  <div class="col">
 
-    <div class="col">
-
-      <section id="calculateTroopAndSpeed" class="card">
-        <div class="card-head">
+    <section id="calculateTroopAndSpeed" class="card card-speed">
+      <div class="card-head">
+        <span class="section-index">1</span>
+        <div class="card-head-text">
           <h2>Tính toán Speed và số lượng quân</h2>
           <p>Nhập thời gian để biết train được bao nhiêu lính, hoặc nhập số lượng lính để biết cần bao nhiêu thời gian — hai bên tự đồng bộ với nhau.</p>
         </div>
+      </div>
 
-        <div class="dual-input">
-          <div class="cluster">
-            <h3>Theo thời gian có sẵn</h3>
-            <div class="time-grid">
-              <label>Ngày
-                <input class="formatted-number" type="text" inputmode="numeric" id="daysNumber" placeholder="0">
-              </label>
-              <label>Giờ
-                <input class="formatted-number" type="text" inputmode="numeric" id="hoursNumber" placeholder="0">
-              </label>
-              <label>Phút
-                <input class="formatted-number" type="text" inputmode="numeric" id="minutesNumber" placeholder="0">
-              </label>
+      <div class="dual-input">
+        <div class="cluster">
+          <h3>Theo thời gian có sẵn</h3>
+          <div class="time-grid">
+            <label>Ngày
+              <input class="formatted-number" type="text" inputmode="numeric" id="daysNumber" placeholder="0">
+            </label>
+            <label>Giờ
+              <input class="formatted-number" type="text" inputmode="numeric" id="hoursNumber" placeholder="0">
+            </label>
+            <label>Phút
+              <input class="formatted-number" type="text" inputmode="numeric" id="minutesNumber" placeholder="0">
+            </label>
+          </div>
+          <button onclick="CalculateQuantityTroops()">Tính số lượng</button>
+        </div>
+
+        <div class="cluster">
+          <h3>Theo số lượng muốn train</h3>
+          <div class="qty-grid">
+            <label>Loại lính
+              <select id="selectTroopType">
+                <optgroup label="Train thẳng">
+                  <option value="15000.25">T1</option>
+                  <option value="30000.5">T2</option>
+                  <option value="60001">T3</option>
+                  <option value="80000.85">T4</option>
+                  <option value="120000.55">T5</option>
+                </optgroup>
+                <optgroup label="Lên T4">
+                  <option value="65000.6">T1 lên T4</option>
+                  <option value="50000.35">T2 lên T4</option>
+                  <option value="19999.85">T3 lên T4</option>
+                </optgroup>
+                <optgroup label="Lên T5">
+                  <option value="105000.3">T1 lên T5</option>
+                  <option value="90000.05">T2 lên T5</option>
+                  <option value="59999.55">T3 lên T5</option>
+                  <option value="39999.7">T4 lên T5</option>
+                </optgroup>
+              </select>
+            </label>
+            <label>Số lượng
+              <input class="formatted-number" type="text" inputmode="numeric" id="quantityTroops" placeholder="0">
+            </label>
+          </div>
+          <button onclick="CalculateSpeed()">Tính speed</button>
+        </div>
+      </div>
+
+      <div id="resultSpeed"></div>
+
+      <div class="tabs" style="margin-top:20px;">
+        <input type="radio" name="trainTabs" id="tabTrain" checked>
+        <input type="radio" name="trainTabs" id="tabT4">
+        <input type="radio" name="trainTabs" id="tabT5">
+
+        <div class="tab-labels">
+          <label for="tabTrain">Train thẳng</label>
+          <label for="tabT4">Lên T4</label>
+          <label for="tabT5">Lên T5</label>
+        </div>
+
+        <div class="tab-panels">
+
+          <div class="tab-panel panel-train">
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr><th>Loại lính</th><th>Số lượng</th><th>Điểm Lãnh chúa</th><th>Điểm Thiên đỉnh</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>T1</td><td id="t1Q"></td><td id="t1SglP">0</td><td id="t1GhP">0</td></tr>
+                  <tr><td>T2</td><td id="t2Q"></td><td id="t2SglP">0</td><td id="t2GhP">0</td></tr>
+                  <tr><td>T3</td><td id="t3Q"></td><td id="t3SglP">0</td><td id="t3GhP">0</td></tr>
+                  <tr><td>T4</td><td id="t4Q"></td><td id="t4SglP">0</td><td id="t4GhP">0</td></tr>
+                  <tr><td>T5</td><td id="t5Q"></td><td id="t5SglP">0</td><td id="t5GhP">0</td></tr>
+                </tbody>
+              </table>
             </div>
-            <button onclick="CalculateQuantityTroops()">Tính số lượng</button>
           </div>
 
-          <div class="cluster">
-            <h3>Theo số lượng muốn train</h3>
-            <div class="qty-grid">
-              <label>Loại lính
-                <select id="selectTroopType">
-                  <optgroup label="Train thẳng">
-                    <option value="15000.25">T1</option>
-                    <option value="30000.5">T2</option>
-                    <option value="60001">T3</option>
-                    <option value="80000.85">T4</option>
-                    <option value="120000.55">T5</option>
-                  </optgroup>
-                  <optgroup label="Lên T4">
-                    <option value="65000.6">T1 lên T4</option>
-                    <option value="50000.35">T2 lên T4</option>
-                    <option value="19999.85">T3 lên T4</option>
-                  </optgroup>
-                  <optgroup label="Lên T5">
-                    <option value="105000.3">T1 lên T5</option>
-                    <option value="90000.05">T2 lên T5</option>
-                    <option value="59999.55">T3 lên T5</option>
-                    <option value="39999.7">T4 lên T5</option>
-                  </optgroup>
-                </select>
-              </label>
-              <label>Số lượng
-                <input class="formatted-number" type="text" inputmode="numeric" id="quantityTroops" placeholder="0">
-              </label>
+          <div class="tab-panel panel-t4">
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr><th>Nâng cấp</th><th>Số lượng</th><th>Điểm Lãnh chúa</th><th>Điểm Thiên đỉnh</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>T1 lên T4</td><td id="t1T4Q"></td><td id="t1T4SglP">0</td><td id="t1T4GhP">0</td></tr>
+                  <tr><td>T2 lên T4</td><td id="t2T4Q"></td><td id="t2T4SglP">0</td><td id="t2T4GhP">0</td></tr>
+                  <tr><td>T3 lên T4</td><td id="t3T4Q"></td><td id="t3T4SglP">0</td><td id="t3T4GhP">0</td></tr>
+                </tbody>
+              </table>
             </div>
-            <button onclick="CalculateSpeed()">Tính speed</button>
-          </div>
-        </div>
-
-        <div id="resultSpeed"></div>
-
-        <div class="tabs" style="margin-top:20px;">
-          <input type="radio" name="trainTabs" id="tabTrain" checked>
-          <input type="radio" name="trainTabs" id="tabT4">
-          <input type="radio" name="trainTabs" id="tabT5">
-
-          <div class="tab-labels">
-            <label for="tabTrain">Train thẳng</label>
-            <label for="tabT4">Lên T4</label>
-            <label for="tabT5">Lên T5</label>
           </div>
 
-          <div class="tab-panels">
-
-            <div class="tab-panel panel-train">
-              <div class="table-wrap">
-                <table>
-                  <thead>
-                    <tr><th>Loại lính</th><th>Số lượng</th><th>Điểm Lãnh chúa</th><th>Điểm Thiên đỉnh</th></tr>
-                  </thead>
-                  <tbody>
-                    <tr><td>T1</td><td id="t1Q"></td><td id="t1SglP">0</td><td id="t1GhP">0</td></tr>
-                    <tr><td>T2</td><td id="t2Q"></td><td id="t2SglP">0</td><td id="t2GhP">0</td></tr>
-                    <tr><td>T3</td><td id="t3Q"></td><td id="t3SglP">0</td><td id="t3GhP">0</td></tr>
-                    <tr><td>T4</td><td id="t4Q"></td><td id="t4SglP">0</td><td id="t4GhP">0</td></tr>
-                    <tr><td>T5</td><td id="t5Q"></td><td id="t5SglP">0</td><td id="t5GhP">0</td></tr>
-                  </tbody>
-                </table>
-              </div>
+          <div class="tab-panel panel-t5">
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr><th>Nâng cấp</th><th>Số lượng</th><th>Điểm Lãnh chúa</th><th>Điểm Thiên đỉnh</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>T1 lên T5</td><td id="t1T5Q"></td><td id="t1T5SglP">0</td><td id="t1T5GhP">0</td></tr>
+                  <tr><td>T2 lên T5</td><td id="t2T5Q"></td><td id="t2T5SglP">0</td><td id="t2T5GhP">0</td></tr>
+                  <tr><td>T3 lên T5</td><td id="t3T5Q"></td><td id="t3T5SglP">0</td><td id="t3T5GhP">0</td></tr>
+                  <tr><td>T4 lên T5</td><td id="t4T5Q"></td><td id="t4T5SglP">0</td><td id="t4T5GhP">0</td></tr>
+                </tbody>
+              </table>
             </div>
-
-            <div class="tab-panel panel-t4">
-              <div class="table-wrap">
-                <table>
-                  <thead>
-                    <tr><th>Nâng cấp</th><th>Số lượng</th><th>Điểm Lãnh chúa</th><th>Điểm Thiên đỉnh</th></tr>
-                  </thead>
-                  <tbody>
-                    <tr><td>T1 lên T4</td><td id="t1T4Q"></td><td id="t1T4SglP">0</td><td id="t1T4GhP">0</td></tr>
-                    <tr><td>T2 lên T4</td><td id="t2T4Q"></td><td id="t2T4SglP">0</td><td id="t2T4GhP">0</td></tr>
-                    <tr><td>T3 lên T4</td><td id="t3T4Q"></td><td id="t3T4SglP">0</td><td id="t3T4GhP">0</td></tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-
-            <div class="tab-panel panel-t5">
-              <div class="table-wrap">
-                <table>
-                  <thead>
-                    <tr><th>Nâng cấp</th><th>Số lượng</th><th>Điểm Lãnh chúa</th><th>Điểm Thiên đỉnh</th></tr>
-                  </thead>
-                  <tbody>
-                    <tr><td>T1 lên T5</td><td id="t1T5Q"></td><td id="t1T5SglP">0</td><td id="t1T5GhP">0</td></tr>
-                    <tr><td>T2 lên T5</td><td id="t2T5Q"></td><td id="t2T5SglP">0</td><td id="t2T5GhP">0</td></tr>
-                    <tr><td>T3 lên T5</td><td id="t3T5Q"></td><td id="t3T5SglP">0</td><td id="t3T5GhP">0</td></tr>
-                    <tr><td>T4 lên T5</td><td id="t4T5Q"></td><td id="t4T5SglP">0</td><td id="t4T5GhP">0</td></tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-
           </div>
+
         </div>
-      </section>
+      </div>
+    </section>
 
-    </div>
+    <section id="calculateRSS" class="card card-rss">
+      <div class="card-head">
+        <span class="section-index">2</span>
+        <div class="card-head-text"><h2>Tính RSS cần dùng</h2></div>
+      </div>
 
-    <div class="col">
+      <p class="rss-hint"><b>Bước 1:</b> chọn loại quân muốn train. <b>Bước 2:</b> nhập số lượng từng loại lính — RSS sẽ tự tính.</p>
 
-      <section id="calculateRSS" class="card">
-        <div class="card-head"><h2>Tính RSS cần dùng</h2></div>
+      <div class="segmented">
+        <input type="radio" id="rssOption1" name="choice" value="T4"><label for="rssOption1">T4</label>
+        <input type="radio" id="rssOption2" name="choice" value="T5"><label for="rssOption2">T5</label>
+        <input type="radio" id="rssOption3" name="choice" value="T4_T5"><label for="rssOption3">T4→T5</label>
+      </div>
 
-        <p class="rss-hint"><b>Bước 1:</b> chọn loại quân muốn train. <b>Bước 2:</b> nhập số lượng từng loại lính — RSS sẽ tự tính.</p>
+      <div class="rss-toolbar">
+        <div class="rss-total">Còn lại: <span id="totalTroopCanTrain">0</span></div>
+        <button class="ghost-button" type="button" onclick="ResetTroopInputs()">Reset</button>
+      </div>
 
-        <div class="segmented" style="margin-bottom:14px;">
-          <input type="radio" id="rssOption1" name="choice" value="T4"><label for="rssOption1">T4</label>
-          <input type="radio" id="rssOption2" name="choice" value="T5"><label for="rssOption2">T5</label>
-          <input type="radio" id="rssOption3" name="choice" value="T4_T5"><label for="rssOption3">T4→T5</label>
+      <div class="troop-inputs">
+        <div class="troop-row">
+          <label for="archerInput">Cung <span id="archerLable"></span></label>
+          <input class="formatted-number" name="troopInput" type="text" inputmode="numeric" id="archerInput" value="">
+          <button class="ghost-button select-all-button" type="button" onclick="SelectAllRemainingTroops('archerInput')">Chọn hết</button>
         </div>
-
-        <div class="rss-toolbar">
-          <div class="rss-total">Còn lại: <span id="totalTroopCanTrain">0</span></div>
-          <button class="ghost-button" type="button" onclick="ResetTroopInputs()">Reset</button>
+        <div class="troop-row">
+          <label for="mageInput">Phép <span id="mageLable"></span></label>
+          <input class="formatted-number" name="troopInput" type="text" inputmode="numeric" id="mageInput" value="">
+          <button class="ghost-button select-all-button" type="button" onclick="SelectAllRemainingTroops('mageInput')">Chọn hết</button>
         </div>
-
-        <div class="troop-inputs">
-          <div class="troop-row">
-            <label for="archerInput">Cung <span id="archerLable"></span></label>
-            <input class="formatted-number" name="troopInput" type="text" inputmode="numeric" id="archerInput" value="">
-            <button class="ghost-button select-all-button" type="button" onclick="SelectAllRemainingTroops('archerInput')">Chọn hết</button>
-          </div>
-          <div class="troop-row">
-            <label for="mageInput">Phép <span id="mageLable"></span></label>
-            <input class="formatted-number" name="troopInput" type="text" inputmode="numeric" id="mageInput" value="">
-            <button class="ghost-button select-all-button" type="button" onclick="SelectAllRemainingTroops('mageInput')">Chọn hết</button>
-          </div>
-          <div class="troop-row">
-            <label for="cavalryInput">Kỵ <span id="cavalryLable"></span></label>
-            <input class="formatted-number" name="troopInput" type="text" inputmode="numeric" id="cavalryInput" value="">
-            <button class="ghost-button select-all-button" type="button" onclick="SelectAllRemainingTroops('cavalryInput')">Chọn hết</button>
-          </div>
-          <div class="troop-row">
-            <label for="infantryInput">Bộ <span id="infantryLable"></span></label>
-            <input class="formatted-number" name="troopInput" type="text" inputmode="numeric" id="infantryInput" value="">
-            <button class="ghost-button select-all-button" type="button" onclick="SelectAllRemainingTroops('infantryInput')">Chọn hết</button>
-          </div>
+        <div class="troop-row">
+          <label for="cavalryInput">Kỵ <span id="cavalryLable"></span></label>
+          <input class="formatted-number" name="troopInput" type="text" inputmode="numeric" id="cavalryInput" value="">
+          <button class="ghost-button select-all-button" type="button" onclick="SelectAllRemainingTroops('cavalryInput')">Chọn hết</button>
         </div>
-
-        <div class="rss-summary">
-          <div class="resource-card">
-            <span class="resource-icon">
-              <img src="images/gold.webp" alt="Icon vàng">
-            </span>
-            <span>Vàng</span>
-            <strong id="totalGold">0</strong>
-          </div>
-          <div class="resource-card">
-            <span class="resource-icon">
-              <img src="images/wood.webp" alt="Icon gỗ">
-            </span>
-            <span>Gỗ</span>
-            <strong id="totalWood">0</strong>
-          </div>
-          <div class="resource-card">
-            <span class="resource-icon">
-              <img src="images/ore.webp" alt="Icon đá">
-            </span>
-            <span>Đá</span>
-            <strong id="totalStone">0</strong>
-          </div>
-          <div class="resource-card">
-            <span class="resource-icon">
-              <img src="images/mana.webp" alt="Icon mana">
-            </span>
-            <span>Mana</span>
-            <strong id="totalMana">0</strong>
-          </div>
+        <div class="troop-row">
+          <label for="infantryInput">Bộ <span id="infantryLable"></span></label>
+          <input class="formatted-number" name="troopInput" type="text" inputmode="numeric" id="infantryInput" value="">
+          <button class="ghost-button select-all-button" type="button" onclick="SelectAllRemainingTroops('infantryInput')">Chọn hết</button>
         </div>
+      </div>
 
-      </section>
-
-      <section id="calculateTimeForEvent" class="card">
-        <div class="card-head">
-          <h2>Tính thời gian bắt đầu luyện lính cho sự kiện.</h2>
-          <p><b>Lưu ý nhập buff ở bên trên để có thể tính toán chính xác</b></p>
+      <div class="rss-summary">
+        <div class="resource-card">
+          <span>Vàng</span>
+          <strong id="totalGold">0</strong>
         </div>
+        <div class="resource-card">
+          <span>Gỗ</span>
+          <strong id="totalWood">0</strong>
+        </div>
+        <div class="resource-card">
+          <span>Đá</span>
+          <strong id="totalStone">0</strong>
+        </div>
+        <div class="resource-card">
+          <span>Mana</span>
+          <strong id="totalMana">0</strong>
+        </div>
+      </div>
+    </section>
 
-        <label style="margin-bottom:10px;">Ngày bắt đầu sự kiện
+    <section id="calculateTimeForEvent" class="card card-event">
+      <div class="card-head">
+        <span class="section-index">3</span>
+        <div class="card-head-text">
+          <h2>Tính thời gian bắt đầu luyện lính cho sự kiện</h2>
+          <p><b>Lưu ý:</b> nhập buff ở phía trên để kết quả được chính xác.</p>
+        </div>
+      </div>
+
+      <div class="event-form-grid">
+        <label>Ngày bắt đầu sự kiện
           <input type="date" id="eventDate">
         </label>
-
-        <div class="event-grid">
-          <label>Loại lính
-            <select id="eventTroopType">
-              <optgroup label="Train thẳng">
-                <option value="15000.25">T1</option>
-                <option value="30000.5">T2</option>
-                <option value="60001">T3</option>
-                <option value="80000.85">T4</option>
-                <option value="120000.55">T5</option>
-              </optgroup>
-              <optgroup label="Lên T4">
-                <option value="65000.6">T1 lên T4</option>
-                <option value="50000.35">T2 lên T4</option>
-                <option value="19999.85">T3 lên T4</option>
-              </optgroup>
-              <optgroup label="Lên T5">
-                <option value="105000.3">T1 lên T5</option>
-                <option value="90000.05">T2 lên T5</option>
-                <option value="59999.55">T3 lên T5</option>
-                <option value="39999.7">T4 lên T5</option>
-              </optgroup>
-            </select>
-          </label>
-          <label>Số lượng
-            <input class="formatted-number" type="text" inputmode="numeric" id="eventTroopQuantity" placeholder="0">
-          </label>
-        </div>
-
+        <label>Loại lính
+          <select id="eventTroopType">
+            <optgroup label="Train thẳng">
+              <option value="15000.25">T1</option>
+              <option value="30000.5">T2</option>
+              <option value="60001">T3</option>
+              <option value="80000.85">T4</option>
+              <option value="120000.55">T5</option>
+            </optgroup>
+            <optgroup label="Lên T4">
+              <option value="65000.6">T1 lên T4</option>
+              <option value="50000.35">T2 lên T4</option>
+              <option value="19999.85">T3 lên T4</option>
+            </optgroup>
+            <optgroup label="Lên T5">
+              <option value="105000.3">T1 lên T5</option>
+              <option value="90000.05">T2 lên T5</option>
+              <option value="59999.55">T3 lên T5</option>
+              <option value="39999.7">T4 lên T5</option>
+            </optgroup>
+          </select>
+        </label>
+        <label>Số lượng
+          <input class="formatted-number" type="text" inputmode="numeric" id="eventTroopQuantity" placeholder="0">
+        </label>
         <button type="button" onclick="CalculateEventTraining()">Tính toán</button>
-        <div id="eventTrainingResult" aria-live="polite"></div>
-      </section>
+      </div>
 
-    </div>
+      <div id="eventTrainingResult" aria-live="polite"></div>
+    </section>
 
   </div>
 
